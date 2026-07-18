@@ -1,5 +1,4 @@
 import os
-
 os.environ["HF_HUB_DISABLE_XET"] = "1"
 
 import sys
@@ -10,6 +9,7 @@ from openai import OpenAI
 from transformers import pipeline
 from dotenv import load_dotenv
 import re
+import time
 
 from db_utils import init_db, log_claim
 from rag_utils import build_vectorstore, check_claim_grounding
@@ -43,148 +43,103 @@ def check_claim(context, claim):
     result = nli_model(f"{context}</s></s>{claim}")[0]
     return result["label"], round(result["score"], 3)
 
-def analyze_answer(context, question, answer, is_consistent_overall, vectorstore):
-    claims = split_claims(answer)
-    claim_results = []
-    hallucinated_count = 0
-    scoreable_count = 0
-
-    for claim in claims:
-        if is_refusal(claim):
-            claim_results.append({
-                "claim": claim,
-                "type": "refusal",
-                "verdict": "Refusal — not a hallucination",
-                "reason": "Model honestly admitted uncertainty"
-            })
-            log_claim(context, question, answer, claim, "REFUSAL", 1.0)
-            continue
-
-        nli_label, nli_score = check_claim(context, claim)
-        is_grounded, rag_score, best_chunk = check_claim_grounding(vectorstore, claim)
-        judge_results = multi_llm_judge(context, claim)
-
-        final_verdict, final_reason = compute_final_verdict(nli_label, is_grounded, judge_results, is_consistent_overall)
-
-        scoreable_count += 1
-        if "Hallucination" in final_verdict:
-            hallucinated_count += 1
-
-        claim_results.append({
-            "claim": claim,
-            "type": "checked",
-            "nli_label": nli_label,
-            "nli_score": nli_score,
-            "is_grounded": is_grounded,
-            "rag_score": rag_score,
-            "best_chunk": best_chunk,
-            "judge_results": judge_results,
-            "verdict": final_verdict,
-            "reason": final_reason
-        })
-
-        log_claim(context, question, answer, claim, nli_label, nli_score)
-
-    hallucination_score = round((hallucinated_count / scoreable_count) * 100, 1) if scoreable_count > 0 else 0.0
-    return claim_results, hallucination_score
-
-def render_claim_card(r):
-    if r["type"] == "refusal":
-        st.markdown(f"**{r['claim']}**")
-        st.caption(r["verdict"])
-        st.divider()
-        return
-
-    if "High-Confidence" in r["verdict"]:
-        badge_color = "red"
-    elif "Possible" in r["verdict"]:
-        badge_color = "orange"
-    else:
-        badge_color = "green"
-
-    st.markdown(f"**{r['claim']}**")
-    st.markdown(f":{badge_color}[{r['verdict']}]")
-    st.caption(r["reason"])
-
-    nli_icon = "🚩" if r["nli_label"].upper() == "CONTRADICTION" else "✅" if r["nli_label"].upper() == "ENTAILMENT" else "⚪"
-    rag_icon = "✅" if r["is_grounded"] else "🚩"
-
-    st.caption(f"{nli_icon} NLI: {r['nli_label']} ({r['nli_score']})  •  {rag_icon} RAG: {'grounded' if r['is_grounded'] else 'not grounded'} ({r['rag_score']})")
-
-    judge_line = "  •  ".join(
-        f"{'🚩' if 'UNSUPPORTED' in v.upper() else '✅' if 'SUPPORTED' in v.upper() else '⚪'} {name}"
-        for name, v in r["judge_results"].items()
-    )
-    st.caption(judge_line)
-    st.divider()
-
 if st.button("Analyze"):
     if not context or not question:
         st.warning("Please fill in both Context and Question.")
     else:
-        st.markdown(f"#### Question: {question}")
-        st.divider()
+        st.markdown(f"##### 🌳 Context")
+        st.caption(f"↳ {question}")
 
         with st.spinner("Generating 3 answers..."):
             answers = generate_multiple_answers(context, question, n=3)
 
         with st.spinner("Checking cross-sample consistency..."):
             consistency_results = multi_consistency_check(answers[0], answers[1], answers[2])
-
-        consistent_votes = 0
-        total_votes = 0
-        for judge_name, verdict in consistency_results.items():
-            if "ERROR" not in verdict.upper():
-                total_votes += 1
-                if "CONSISTENT" in verdict.upper() and "INCONSISTENT" not in verdict.upper():
-                    consistent_votes += 1
-
-        is_consistent_overall = (consistent_votes >= (total_votes / 2)) if total_votes > 0 else True
-
-        with st.expander("Cross-sample consistency check"):
-            for judge_name, verdict in consistency_results.items():
-                flag = "✅" if "CONSISTENT" in verdict.upper() and "INCONSISTENT" not in verdict.upper() else "🚩"
-                st.write(f"{flag} **{judge_name}:** {verdict}")
+            consistent_votes = sum(1 for v in consistency_results.values() if "ERROR" not in v.upper() and "CONSISTENT" in v.upper() and "INCONSISTENT" not in v.upper())
+            total_votes = sum(1 for v in consistency_results.values() if "ERROR" not in v.upper())
+            is_consistent = (consistent_votes >= total_votes / 2) if total_votes > 0 else True
 
         st.divider()
 
-        with st.spinner("Building context index..."):
-            vectorstore = build_vectorstore(context)
+        vectorstore = build_vectorstore(context)
+        cols = st.columns(3)
 
-        col1, col2, col3 = st.columns(3)
-        columns = [col1, col2, col3]
-        headers = [col.empty() for col in columns]
-        bodies = [col.container() for col in columns]
+        for i, (ans, col) in enumerate(zip(answers, cols), 1):
+            with col:
+                st.markdown(f"**├── Answer {i}**")
+                score_ph = st.empty()
+                score_ph.badge("analyzing...", color="gray")
+                st.caption(ans)
 
-        for i, header in enumerate(headers, 1):
-            header.markdown(f"**Answer {i}** — analyzing...")
+                claims = split_claims(ans)
+                bad_votes = 0
+                total_signals = 0
 
-        all_results = []
-        for i, (ans, header, body) in enumerate(zip(answers, headers, bodies), 1):
-            with body:
-                st.write(ans)
-            claim_results, hallucination_score = analyze_answer(context, question, ans, is_consistent_overall, vectorstore)
-            all_results.append({
-                "index": i,
-                "answer": ans,
-                "claim_results": claim_results,
-                "hallucination_score": hallucination_score
-            })
-            header.markdown(f"**Answer {i}** — {hallucination_score}% hallucinated")
+                live_score_ph = st.empty()
 
-        ranked = sorted(all_results, key=lambda x: x["hallucination_score"])
-        best = ranked[0]
+                for claim in claims:
+                    if is_refusal(claim):
+                        st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim[:40]}..._")
+                        st.badge("refusal — skipped", color="gray")
+                        continue
+
+                    st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim[:40]}..._" if len(claim) > 40 else f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim}_")
+
+                    nli_ph = st.empty()
+                    nli_ph.badge("NLI checking...", color="gray")
+                    time.sleep(0.4)
+                    nli_label, nli_score = check_claim(context, claim)
+                    nli_flagged = nli_label.upper() == "CONTRADICTION"
+                    with nli_ph.popover(f"NLI: {nli_label}", use_container_width=False):
+                        st.write(f"Label: **{nli_label}**")
+                        st.write(f"Confidence: {nli_score}")
+                    total_signals += 1
+                    if nli_flagged:
+                        bad_votes += 1
+
+                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
+                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
+
+                    rag_ph = st.empty()
+                    rag_ph.badge("RAG checking...", color="gray")
+                    time.sleep(0.4)
+                    is_grounded, rag_score, best_chunk = check_claim_grounding(vectorstore, claim)
+                    with rag_ph.popover(f"RAG: {'Grounded' if is_grounded else 'Not grounded'}"):
+                        st.write(f"Score: {rag_score}")
+                        st.write(f"Closest chunk: _{best_chunk}_")
+                    total_signals += 1
+                    if not is_grounded:
+                        bad_votes += 1
+
+                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
+                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
+
+                    judges_ph = st.empty()
+                    judges_ph.badge("Judges checking...", color="gray")
+                    time.sleep(0.4)
+                    judge_results = multi_llm_judge(context, claim)
+                    unsupported = sum(1 for v in judge_results.values() if "ERROR" not in v.upper() and "UNSUPPORTED" in v.upper())
+                    valid_judges = sum(1 for v in judge_results.values() if "ERROR" not in v.upper())
+                    with judges_ph.popover(f"Judges: {unsupported}/{valid_judges} flagged"):
+                        for jn, jv in judge_results.items():
+                            st.write(f"**{jn}:** {jv}")
+                    total_signals += valid_judges
+                    bad_votes += unsupported
+
+                    log_claim(context, question, ans, claim, nli_label, nli_score)
+
+                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
+                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
+
+                total_signals += 1
+                if not is_consistent:
+                    bad_votes += 1
+                st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── Consistency: {'✅ stable' if is_consistent else '🚩 unstable'}")
+
+                answer_score = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
+                color = "red" if answer_score >= 67 else "orange" if answer_score >= 34 else "green"
+                score_ph.badge(f"{answer_score}% flagged", color=color)
+                live_score_ph.caption(f"✅ Final: {bad_votes}/{total_signals} flagged = {answer_score}%")
 
         st.divider()
-        st.markdown(f"### Best answer: Answer {best['index']} ({best['hallucination_score']}% hallucinated)")
-        st.write(best["answer"])
-        for r in best["claim_results"]:
-            render_claim_card(r)
-
-        st.markdown("### Full breakdown")
-        tabs = st.tabs([f"Answer {r['index']} ({r['hallucination_score']}%)" for r in all_results])
-        for tab, r in zip(tabs, all_results):
-            with tab:
-                st.write(r["answer"])
-                for cr in r["claim_results"]:
-                    render_claim_card(cr)
+        st.caption("Click any signal badge above to expand its detail.")

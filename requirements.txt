@@ -7,3 +7,10 @@ langchain
 langchain-community
 langchain-openai
 faiss-cpu
+groq
+google-generativeai
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+faiss-cpu

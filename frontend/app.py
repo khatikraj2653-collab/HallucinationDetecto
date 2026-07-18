@@ -1,8 +1,5 @@
 import os
 
-os.environ["HF_HOME"] = "D:\\huggingface_cache"
-os.environ["TEMP"] = "D:\\temp"
-os.environ["TMP"] = "D:\\temp"
 os.environ["HF_HUB_DISABLE_XET"] = "1"
 
 import sys

@@ -17,6 +17,7 @@ from refusal_utils import is_refusal
 from llm_judge import multi_llm_judge, multi_consistency_check
 from consistency_utils import generate_multiple_answers
 from scoring_utils import compute_final_verdict
+from graph_utils import analyze_answers_parallel
 
 load_dotenv()
 init_db()
@@ -62,74 +63,52 @@ if st.button("Analyze"):
         st.divider()
 
         vectorstore = build_vectorstore(context)
+
+        with st.spinner("Running parallel detection across all 3 answers..."):
+            all_results = analyze_answers_parallel(context, answers, vectorstore, check_claim, split_claims)
+
         cols = st.columns(3)
 
-        for i, (ans, col) in enumerate(zip(answers, cols), 1):
+        for i, (ans, col, claim_results) in enumerate(zip(answers, cols, all_results), 1):
             with col:
                 st.markdown(f"**├── Answer {i}**")
-                score_ph = st.empty()
-                score_ph.badge("analyzing...", color="gray")
                 st.caption(ans)
 
-                claims = split_claims(ans)
                 bad_votes = 0
                 total_signals = 0
 
-                live_score_ph = st.empty()
+                for result in claim_results:
+                    claim = result["claim"]
+                    st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim[:40]}..._" if len(claim) > 40 else f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim}_")
 
-                for claim in claims:
-                    if is_refusal(claim):
-                        st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim[:40]}..._")
+                    if result["is_refusal"]:
                         st.badge("refusal — skipped", color="gray")
                         continue
 
-                    st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim[:40]}..._" if len(claim) > 40 else f"&nbsp;&nbsp;&nbsp;&nbsp;└── _{claim}_")
-
-                    nli_ph = st.empty()
-                    nli_ph.badge("NLI checking...", color="gray")
-                    time.sleep(0.4)
-                    nli_label, nli_score = check_claim(context, claim)
-                    nli_flagged = nli_label.upper() == "CONTRADICTION"
-                    with nli_ph.popover(f"NLI: {nli_label}", use_container_width=False):
-                        st.write(f"Label: **{nli_label}**")
-                        st.write(f"Confidence: {nli_score}")
+                    nli_flagged = result["nli_label"].upper() == "CONTRADICTION"
+                    with st.popover(f"NLI: {result['nli_label']}"):
+                        st.write(f"Confidence: {result['nli_score']}")
                     total_signals += 1
                     if nli_flagged:
                         bad_votes += 1
 
-                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
-                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
-
-                    rag_ph = st.empty()
-                    rag_ph.badge("RAG checking...", color="gray")
-                    time.sleep(0.4)
-                    is_grounded, rag_score, best_chunk = check_claim_grounding(vectorstore, claim)
-                    with rag_ph.popover(f"RAG: {'Grounded' if is_grounded else 'Not grounded'}"):
-                        st.write(f"Score: {rag_score}")
-                        st.write(f"Closest chunk: _{best_chunk}_")
+                    with st.popover(f"RAG: {'Grounded' if result['is_grounded'] else 'Not grounded'}"):
+                        st.write(f"Score: {result['rag_score']}")
+                        st.write(f"Closest chunk: _{result['best_chunk']}_")
                     total_signals += 1
-                    if not is_grounded:
+                    if not result["is_grounded"]:
                         bad_votes += 1
 
-                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
-                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
-
-                    judges_ph = st.empty()
-                    judges_ph.badge("Judges checking...", color="gray")
-                    time.sleep(0.4)
-                    judge_results = multi_llm_judge(context, claim)
+                    judge_results = result["judge_results"]
                     unsupported = sum(1 for v in judge_results.values() if "ERROR" not in v.upper() and "UNSUPPORTED" in v.upper())
                     valid_judges = sum(1 for v in judge_results.values() if "ERROR" not in v.upper())
-                    with judges_ph.popover(f"Judges: {unsupported}/{valid_judges} flagged"):
+                    with st.popover(f"Judges: {unsupported}/{valid_judges} flagged"):
                         for jn, jv in judge_results.items():
                             st.write(f"**{jn}:** {jv}")
                     total_signals += valid_judges
                     bad_votes += unsupported
 
-                    log_claim(context, question, ans, claim, nli_label, nli_score)
-
-                    running_pct = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
-                    live_score_ph.caption(f"⏳ Running: {bad_votes}/{total_signals} flagged = {running_pct}%")
+                    log_claim(context, question, ans, claim, result["nli_label"], result["nli_score"])
 
                 total_signals += 1
                 if not is_consistent:
@@ -138,8 +117,7 @@ if st.button("Analyze"):
 
                 answer_score = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
                 color = "red" if answer_score >= 67 else "orange" if answer_score >= 34 else "green"
-                score_ph.badge(f"{answer_score}% flagged", color=color)
-                live_score_ph.caption(f"✅ Final: {bad_votes}/{total_signals} flagged = {answer_score}%")
+                st.badge(f"{answer_score}% flagged", color=color)
 
         st.divider()
-        st.caption("Click any signal badge above to expand its detail.")
+        st.caption("Click any signal badge above to expand its detail. Powered by LangGraph subgraphs with parallel threading — trace visible in LangSmith.")

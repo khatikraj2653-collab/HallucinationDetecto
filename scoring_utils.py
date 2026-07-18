@@ -1,41 +1,45 @@
-def is_flagged_by_detection(nli_label, is_grounded, judge_results):
-    """Returns True if 2 or more detection signals flag this claim as unsupported."""
-    flags = 0
-    total = 0
-
-    total += 1
-    if nli_label.upper() == "CONTRADICTION":
-        flags += 1
-
-    total += 1
-    if not is_grounded:
-        flags += 1
-
-    for verdict in judge_results.values():
-        if "ERROR" not in verdict.upper():
-            total += 1
-            if "UNSUPPORTED" in verdict.upper():
-                flags += 1
-
-    return flags >= 2, flags, total
-
-
 def compute_final_verdict(nli_label, is_grounded, judge_results, is_consistent):
     """
-    Combines detection signals + cross-sample consistency into one final verdict,
-    using the 4-quadrant logic:
-    - Flagged + Inconsistent  -> High-Confidence Hallucination
-    - Flagged + Consistent    -> Possible Hallucination (systematic bias)
-    - Not Flagged + Consistent -> Faithful
-    - Not Flagged + Inconsistent -> Possible Hallucination (consistency signal only)
-    """
-    flagged, flag_count, total_checks = is_flagged_by_detection(nli_label, is_grounded, judge_results)
+    Equal-weight scoring: 6 signals total, each worth 1 point if flagged.
+    - NLI (1 point if CONTRADICTION)
+    - RAG-grounding (1 point if Not Grounded)
+    - OpenAI judge (1 point if UNSUPPORTED)
+    - Groq judge (1 point if UNSUPPORTED)
+    - Gemini judge (1 point if UNSUPPORTED)
+    - Cross-sample consistency (1 point if Inconsistent)
 
-    if flagged and not is_consistent:
-        return "🚩 High-Confidence Hallucination", f"Flagged by {flag_count}/{total_checks} detectors AND unstable across samples"
-    elif flagged and is_consistent:
-        return "🟠 Possible Hallucination (systematic bias)", f"Flagged by {flag_count}/{total_checks} detectors, but stable across samples"
-    elif not flagged and not is_consistent:
-        return "🟡 Possible Hallucination (consistency signal only)", "Not flagged by detectors, but unstable across samples"
+    hallucination_% = (points / 6) * 100
+
+    >= 67%  -> High-Confidence Hallucination
+    34-66%  -> Possible Hallucination
+    < 34%   -> Faithful
+    """
+    score = 0
+    total = 6
+
+    if nli_label.upper() == "CONTRADICTION":
+        score += 1
+
+    if not is_grounded:
+        score += 1
+
+    for verdict in judge_results.values():
+        if "ERROR" not in verdict.upper() and "UNSUPPORTED" in verdict.upper():
+            score += 1
+        elif "ERROR" in verdict.upper():
+            total -= 1
+
+    if not is_consistent:
+        score += 1
+
+    hallucination_pct = round((score / total) * 100, 1) if total > 0 else 0.0
+
+    if hallucination_pct >= 67:
+        verdict = "🚩 High-Confidence Hallucination"
+    elif hallucination_pct >= 34:
+        verdict = "🟠 Possible Hallucination"
     else:
-        return "✅ Faithful", f"Not flagged by any detector ({flag_count}/{total_checks}), consistent across samples"
+        verdict = "✅ Faithful"
+
+    reason = f"{score}/{total} signals flagged ({hallucination_pct}%)"
+    return verdict, reason

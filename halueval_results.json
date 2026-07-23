@@ -1,0 +1,261 @@
+[
+  {
+    "question": "Bebe Rexha was a singer who guested on the David Guetta song that was produced by which Dutch DJ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Bebe Rexha was a singer who guested on the David Guetta song that was produced by which Dutch DJ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Yukio Mishima and Roberto Bola\u00f1o, are Chilean?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "What Lindsey Stirling song's video received 1.3 million views on YouTube after one day?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What Lindsey Stirling song's video received 1.3 million views on YouTube after one day?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "The 1st Battle of Kharkov was named so by a German field army born in which year ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "The 1st Battle of Kharkov was named so by a German field army born in which year ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Power Balladz, is a live comedy performance featuring a mixture of comedy, trivia, and iconic rock n' roll songs from the 70s, 80s & 90s, the comedy's musical blend includes songs by Heart, a rock band that first found success in Canada and later in the United States and worldwide, are of which nationality ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Power Balladz, is a live comedy performance featuring a mixture of comedy, trivia, and iconic rock n' roll songs from the 70s, 80s & 90s, the comedy's musical blend includes songs by Heart, a rock band that first found success in Canada and later in the United States and worldwide, are of which nationality ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Kazuhito Kosaka, is a Japanese comedian, better known by his stage names Daimaou Kosaka, and which name, used by his fictional singer-songwriter identity, and is best known for his single \"PPAP (Pen-Pineapple-Apple-Pen)\"?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Kazuhito Kosaka, is a Japanese comedian, better known by his stage names Daimaou Kosaka, and which name, used by his fictional singer-songwriter identity, and is best known for his single \"PPAP (Pen-Pineapple-Apple-Pen)\"?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "What was the population of the terminus of the Willunga railway line in 2011",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What was the population of the terminus of the Willunga railway line in 2011",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Stranger Things is an American science fiction-horror web television series created, written, directed and co-executive produced by the Duffer Brothers, the first season stars include Gaten Matarazzo, an American actor, who began his career on the Broadway stage as who, in \"Priscilla, Queen of the Desert\"?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Who wrote the lyrics of Portofino with a collaborator on \"Fiddler on the Roof\"",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": true,
+    "correct": false
+  },
+  {
+    "question": "Who wrote the lyrics of Portofino with a collaborator on \"Fiddler on the Roof\"",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "What Hockey team does Evander Kane play for?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What Hockey team does Evander Kane play for?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Which  castle in the border region of Scotland did Hermitage Water passes through ",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Which  castle in the border region of Scotland did Hermitage Water passes through ",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Which movie was co-written by the person who directed \"Blood\"?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Which movie was co-written by the person who directed \"Blood\"?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Which genus has more species, Fir or Chelone?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Which genus is more spread around the world Maytenus or Eucommia ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Which genus is more spread around the world Maytenus or Eucommia ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "When was the American rapper which was one those whose House Shoes produced their albums born? ",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "When was the American rapper which was one those whose House Shoes produced their albums born? ",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Mel Duncan holds a degree from what private, coeducational liberal arts college located in Saint Paul, Minnesota, US?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Mel Duncan holds a degree from what private, coeducational liberal arts college located in Saint Paul, Minnesota, US?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "In which town was the 1987 American drama film Ironweed, shot on location that featured a 400 acre pastoral cemetery?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "In which town was the 1987 American drama film Ironweed, shot on location that featured a 400 acre pastoral cemetery?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": " Are Phil Mogg and Dave Peters musicians?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": true,
+    "correct": false
+  },
+  {
+    "question": " Are Phil Mogg and Dave Peters musicians?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "The Sia song \"Never Give Up\" is from the soundtrack of a film that is based on what non-fiction book?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "The Sia song \"Never Give Up\" is from the soundtrack of a film that is based on what non-fiction book?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "What was a branch of the Khalwatiyya order of Islamic mysticism founded by Sayyid Hasan Husameddin, with relations to the cousin and son-in-law of Muhammad?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What was a branch of the Khalwatiyya order of Islamic mysticism founded by Sayyid Hasan Husameddin, with relations to the cousin and son-in-law of Muhammad?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  }
+]

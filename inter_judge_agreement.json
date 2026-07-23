@@ -1,0 +1,180 @@
+[
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "UNCLEAR"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "UNCLEAR"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNCLEAR"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNCLEAR",
+    "Groq": "SUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "UNSUPPORTED",
+    "Groq": "UNSUPPORTED",
+    "Gemini": "UNSUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  },
+  {
+    "OpenAI": "SUPPORTED",
+    "Groq": "SUPPORTED",
+    "Gemini": "SUPPORTED"
+  }
+]

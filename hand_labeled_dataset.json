@@ -1,0 +1,142 @@
+[
+  {
+    "domain": "Indian History",
+    "context": "The Battle of Plassey was fought on June 23, 1757, between the British East India Company led by Robert Clive and the Nawab of Bengal, Siraj ud-Daulah. The British victory, aided by the betrayal of Mir Jafar, marked the beginning of British political control in India.",
+    "question": "Who led the British forces at the Battle of Plassey, and who betrayed the Nawab?",
+    "correct_answer": "Robert Clive led the British forces, and Mir Jafar betrayed the Nawab.",
+    "wrong_answer": "Robert Clive led the British forces, and it was Mir Jafar's son who orchestrated the betrayal of the Nawab."
+  },
+  {
+    "domain": "Indian History",
+    "context": "The Quit India Movement was launched by Mahatma Gandhi on August 8, 1942, demanding an end to British rule in India. The movement was launched at the Bombay session of the All India Congress Committee, using the slogan 'Do or Die.'",
+    "question": "When was the Quit India Movement launched, and what was its slogan?",
+    "correct_answer": "It was launched on August 8, 1942, with the slogan 'Do or Die.'",
+    "wrong_answer": "It was launched on August 9, 1942, with the slogan 'Do or Die,' following a delay caused by British intervention."
+  },
+  {
+    "domain": "Indian History",
+    "context": "The Indian National Congress was founded in 1885 by Allan Octavian Hume, a retired British civil servant, along with Indian leaders including Dadabhai Naoroji. Its first session was held in Bombay under the presidency of Womesh Chunder Bonnerjee.",
+    "question": "Who founded the Indian National Congress, and where was its first session held?",
+    "correct_answer": "It was founded by Allan Octavian Hume, and its first session was held in Bombay.",
+    "wrong_answer": "It was founded by Allan Octavian Hume in close partnership with Dadabhai Naoroji, and its first session was held in Poona before moving to Bombay the following year."
+  },
+  {
+    "domain": "Science",
+    "context": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy, producing glucose and oxygen from carbon dioxide and water. This process primarily occurs in chloroplasts, using the pigment chlorophyll to absorb light.",
+    "question": "Where does photosynthesis primarily occur, and what pigment absorbs light?",
+    "correct_answer": "It occurs in chloroplasts, using chlorophyll to absorb light.",
+    "wrong_answer": "It occurs primarily in chloroplasts, using a combination of chlorophyll and carotenoid pigments as the main light-absorbing molecules."
+  },
+  {
+    "domain": "Science",
+    "context": "DNA (deoxyribonucleic acid) is a double-helix molecule composed of four nitrogenous bases: adenine, thymine, guanine, and cytosine. Adenine pairs with thymine, and guanine pairs with cytosine, held together by hydrogen bonds.",
+    "question": "What are the four nitrogenous bases in DNA, and how do they pair?",
+    "correct_answer": "The four bases are adenine, thymine, guanine, and cytosine; adenine pairs with thymine, and guanine pairs with cytosine.",
+    "wrong_answer": "The four bases are adenine, thymine, guanine, and cytosine, held together by three hydrogen bonds in every base pair regardless of which bases are paired."
+  },
+  {
+    "domain": "Science",
+    "context": "The human heart has four chambers: two atria and two ventricles. The right atrium receives deoxygenated blood from the body, and the left ventricle pumps oxygenated blood out to the body through the aorta.",
+    "question": "How many chambers does the human heart have, and which chamber pumps blood to the body?",
+    "correct_answer": "The heart has four chambers, and the left ventricle pumps oxygenated blood to the body.",
+    "wrong_answer": "The heart has four chambers, and the left ventricle pumps blood to the body through the pulmonary artery."
+  },
+  {
+    "domain": "Finance",
+    "context": "Inflation is the rate at which the general level of prices for goods and services rises, eroding purchasing power. Central banks, such as the Federal Reserve in the United States, often raise interest rates to combat high inflation by discouraging borrowing and spending.",
+    "question": "What tool do central banks typically use to combat high inflation?",
+    "correct_answer": "Central banks typically raise interest rates to discourage borrowing and spending.",
+    "wrong_answer": "Central banks typically raise interest rates gradually over several years to avoid destabilizing borrowing and spending patterns."
+  },
+  {
+    "domain": "Finance",
+    "context": "A stock's price-to-earnings (P/E) ratio is calculated by dividing the current share price by the earnings per share (EPS). A high P/E ratio may indicate that investors expect higher future growth, while a low P/E ratio may suggest the stock is undervalued or the company faces challenges.",
+    "question": "How is the P/E ratio calculated, and what might a high P/E ratio indicate?",
+    "correct_answer": "It is calculated by dividing share price by earnings per share, and a high P/E may indicate expected future growth.",
+    "wrong_answer": "It is calculated by dividing share price by earnings per share, and a high P/E ratio reliably indicates the stock is overvalued and due for a correction."
+  },
+  {
+    "domain": "Finance",
+    "context": "Diversification is an investment strategy that involves spreading investments across various financial instruments, industries, and other categories to reduce risk. The core idea is that a portfolio of different investments will, on average, yield higher long-term returns and lower the risk of any single investment.",
+    "question": "What is the core purpose of diversification in investing?",
+    "correct_answer": "The core purpose is to spread investments to reduce risk while aiming for higher long-term returns.",
+    "wrong_answer": "The core purpose is to spread investments across at least ten different industries, since fewer than ten provides no measurable risk reduction."
+  },
+  {
+    "domain": "Geography",
+    "context": "The Sahara Desert is the largest hot desert in the world, spanning much of North Africa and covering approximately 9.2 million square kilometers. It stretches across countries including Algeria, Chad, Egypt, Libya, Mali, Mauritania, Morocco, Niger, Sudan, and Tunisia.",
+    "question": "How large is the Sahara Desert, and which continent is it primarily located on?",
+    "correct_answer": "It covers approximately 9.2 million square kilometers and is located in North Africa.",
+    "wrong_answer": "It covers approximately 9.2 million square kilometers, making it larger than the entire landmass of Australia."
+  },
+  {
+    "domain": "Geography",
+    "context": "The Nile River is generally considered the longest river in the world, stretching approximately 6,650 kilometers through northeastern Africa. It flows through eleven countries, with its main tributaries being the White Nile and the Blue Nile, which converge in Sudan.",
+    "question": "Approximately how long is the Nile River, and what are its two main tributaries?",
+    "correct_answer": "It is approximately 6,650 kilometers long, with the White Nile and Blue Nile as its main tributaries.",
+    "wrong_answer": "It is approximately 6,650 kilometers long, with the White Nile and Blue Nile converging in Ethiopia rather than Sudan."
+  },
+  {
+    "domain": "Geography",
+    "context": "Mount Kilimanjaro, located in Tanzania, is the highest mountain in Africa, standing at 5,895 meters above sea level. It is a dormant volcano composed of three distinct volcanic cones: Kibo, Mawenzi, and Shira.",
+    "question": "Where is Mount Kilimanjaro located, and how tall is it?",
+    "correct_answer": "It is located in Tanzania and stands at 5,895 meters above sea level.",
+    "wrong_answer": "It is located in Tanzania near the Kenyan border and stands at 5,895 meters above sea level."
+  },
+  {
+    "domain": "Indian History",
+    "context": "The Green Revolution in India, primarily during the 1960s and 1970s, was led by agricultural scientist M.S. Swaminathan, who is often called the 'Father of the Green Revolution in India.' It significantly increased food grain production through high-yielding variety seeds, particularly of wheat and rice.",
+    "question": "Who led the Green Revolution in India, and which crops saw the greatest yield increases?",
+    "correct_answer": "M.S. Swaminathan led the Green Revolution, primarily increasing yields of wheat and rice.",
+    "wrong_answer": "M.S. Swaminathan led the Green Revolution, primarily increasing yields of wheat and rice, working closely alongside Norman Borlaug throughout the entire program."
+  },
+  {
+    "domain": "Science",
+    "context": "The speed of light in a vacuum is approximately 299,792 kilometers per second, and is denoted by the symbol 'c' in physics. According to Einstein's theory of special relativity, nothing with mass can travel faster than the speed of light.",
+    "question": "What is the approximate speed of light, and what does relativity say about traveling faster than it?",
+    "correct_answer": "The speed of light is approximately 299,792 kilometers per second, and relativity states nothing with mass can exceed it.",
+    "wrong_answer": "The speed of light is approximately 299,792 kilometers per second in a vacuum, though it can exceed this value when traveling through empty interstellar space."
+  },
+  {
+    "domain": "Finance",
+    "context": "A bond's yield is inversely related to its price: when bond prices rise, yields fall, and when bond prices fall, yields rise. This relationship exists because a bond's fixed coupon payment becomes more or less attractive relative to its current market price.",
+    "question": "What is the relationship between bond prices and bond yields?",
+    "correct_answer": "Bond prices and yields are inversely related — when prices rise, yields fall, and vice versa.",
+    "wrong_answer": "Bond prices and yields are inversely related, though this relationship only holds for government bonds and not corporate bonds."
+  },
+  {
+    "domain": "Geography",
+    "context": "The Amazon Rainforest spans approximately 5.5 million square kilometers, with about 60% of it located within Brazil's borders. It is home to an estimated 10% of the world's known species and plays a crucial role in global carbon cycling.",
+    "question": "What percentage of the Amazon Rainforest is located in Brazil, and how much of the world's species does it host?",
+    "correct_answer": "About 60% is located in Brazil, and it hosts approximately 10% of the world's known species.",
+    "wrong_answer": "About 60% is located in Brazil, with the remainder spread evenly across exactly eight other South American countries."
+  },
+  {
+    "domain": "Indian History",
+    "context": "The Simon Commission, formed in 1927, was a group of British Members of Parliament sent to India to study constitutional reform, but it faced widespread protest because it did not include a single Indian member. Its arrival was met with the slogan 'Simon Go Back.'",
+    "question": "Why did the Simon Commission face widespread protest in India?",
+    "correct_answer": "It faced protest because it did not include a single Indian member.",
+    "wrong_answer": "It faced protest primarily because it did not include a single Indian member, a decision made specifically to exclude Congress representatives after the party threatened a boycott."
+  },
+  {
+    "domain": "Science",
+    "context": "Vaccines work by introducing a weakened, inactivated, or partial form of a pathogen (or genetic instructions for a piece of it) into the body, prompting the immune system to produce antibodies without causing the actual disease. This creates immunological memory for future protection.",
+    "question": "How do vaccines create immunity without causing disease?",
+    "correct_answer": "They introduce a weakened or partial form of a pathogen, prompting antibody production and immunological memory.",
+    "wrong_answer": "They introduce a weakened or partial form of a pathogen, prompting antibody production that provides permanent, lifelong immunity in all cases."
+  },
+  {
+    "domain": "Finance",
+    "context": "Market capitalization is calculated by multiplying a company's current share price by its total number of outstanding shares. Companies are often categorized as large-cap (typically over $10 billion), mid-cap, or small-cap based on this figure.",
+    "question": "How is market capitalization calculated, and what is a common threshold for large-cap status?",
+    "correct_answer": "It is calculated by multiplying share price by total outstanding shares, with large-cap typically starting around $10 billion.",
+    "wrong_answer": "It is calculated by multiplying share price by total outstanding shares, with large-cap status legally defined and regulated at exactly $10 billion by the SEC."
+  },
+  {
+    "domain": "Geography",
+    "context": "The Great Lakes of North America consist of five freshwater lakes: Superior, Michigan, Huron, Erie, and Ontario. Lake Superior is the largest by surface area, while Lake Michigan is the only one located entirely within the United States.",
+    "question": "How many Great Lakes are there, and which one is entirely within the United States?",
+    "correct_answer": "There are five Great Lakes, and Lake Michigan is the only one entirely within the United States.",
+    "wrong_answer": "There are five Great Lakes, and Lake Michigan is the only one entirely within the United States, a status it has held since the U.S.-Canada border was formally established in 1908."
+  }
+]

@@ -1,0 +1,322 @@
+[
+  {
+    "domain": "Indian History",
+    "question": "Who led the British forces at the Battle of Plassey, and who betrayed the Nawab?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Who led the British forces at the Battle of Plassey, and who betrayed the Nawab?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "When was the Quit India Movement launched, and what was its slogan?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "When was the Quit India Movement launched, and what was its slogan?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Who founded the Indian National Congress, and where was its first session held?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Who founded the Indian National Congress, and where was its first session held?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "Where does photosynthesis primarily occur, and what pigment absorbs light?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "Where does photosynthesis primarily occur, and what pigment absorbs light?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "What are the four nitrogenous bases in DNA, and how do they pair?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "What are the four nitrogenous bases in DNA, and how do they pair?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "How many chambers does the human heart have, and which chamber pumps blood to the body?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "How many chambers does the human heart have, and which chamber pumps blood to the body?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What tool do central banks typically use to combat high inflation?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What tool do central banks typically use to combat high inflation?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "domain": "Finance",
+    "question": "How is the P/E ratio calculated, and what might a high P/E ratio indicate?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "How is the P/E ratio calculated, and what might a high P/E ratio indicate?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What is the core purpose of diversification in investing?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What is the core purpose of diversification in investing?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "How large is the Sahara Desert, and which continent is it primarily located on?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "How large is the Sahara Desert, and which continent is it primarily located on?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "domain": "Geography",
+    "question": "Approximately how long is the Nile River, and what are its two main tributaries?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "Approximately how long is the Nile River, and what are its two main tributaries?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "Where is Mount Kilimanjaro located, and how tall is it?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "Where is Mount Kilimanjaro located, and how tall is it?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "domain": "Indian History",
+    "question": "Who led the Green Revolution in India, and which crops saw the greatest yield increases?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Who led the Green Revolution in India, and which crops saw the greatest yield increases?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "What is the approximate speed of light, and what does relativity say about traveling faster than it?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "What is the approximate speed of light, and what does relativity say about traveling faster than it?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What is the relationship between bond prices and bond yields?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "What is the relationship between bond prices and bond yields?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "What percentage of the Amazon Rainforest is located in Brazil, and how much of the world's species does it host?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "What percentage of the Amazon Rainforest is located in Brazil, and how much of the world's species does it host?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Why did the Simon Commission face widespread protest in India?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Indian History",
+    "question": "Why did the Simon Commission face widespread protest in India?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "domain": "Science",
+    "question": "How do vaccines create immunity without causing disease?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Science",
+    "question": "How do vaccines create immunity without causing disease?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "How is market capitalization calculated, and what is a common threshold for large-cap status?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Finance",
+    "question": "How is market capitalization calculated, and what is a common threshold for large-cap status?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "How many Great Lakes are there, and which one is entirely within the United States?",
+    "answer_type": "correct",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "domain": "Geography",
+    "question": "How many Great Lakes are there, and which one is entirely within the United States?",
+    "answer_type": "wrong",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  }
+]

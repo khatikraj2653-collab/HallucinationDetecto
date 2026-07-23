@@ -1,0 +1,26 @@
+{
+  "halueval": {
+    "dataset": "HaluEval (combined)",
+    "total": 76,
+    "tp": 24,
+    "fp": 5,
+    "tn": 31,
+    "fn": 16,
+    "accuracy": 72.4,
+    "precision": 82.8,
+    "recall": 60.0,
+    "f1": 69.6
+  },
+  "truthfulqa": {
+    "dataset": "TruthfulQA (combined)",
+    "total": 77,
+    "tp": 34,
+    "fp": 0,
+    "tn": 37,
+    "fn": 6,
+    "accuracy": 92.2,
+    "precision": 100.0,
+    "recall": 85.0,
+    "f1": 91.9
+  }
+}

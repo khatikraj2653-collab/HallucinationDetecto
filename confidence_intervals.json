@@ -1,0 +1,38 @@
+{
+  "halueval": {
+    "dataset": "HaluEval",
+    "n": 76,
+    "accuracy": 72.4,
+    "ci_lower": 61.4,
+    "ci_upper": 81.2
+  },
+  "truthfulqa": {
+    "dataset": "TruthfulQA",
+    "n": 77,
+    "accuracy": 92.2,
+    "ci_lower": 84.0,
+    "ci_upper": 96.4
+  },
+  "ablation": {
+    "NLI only": {
+      "accuracy": 54.1,
+      "ci_lower": 38.4,
+      "ci_upper": 69.0
+    },
+    "NLI + RAG": {
+      "accuracy": 45.9,
+      "ci_lower": 31.0,
+      "ci_upper": 61.6
+    },
+    "NLI + RAG + Judges": {
+      "accuracy": 64.9,
+      "ci_lower": 48.8,
+      "ci_upper": 78.2
+    },
+    "Full ensemble (6)": {
+      "accuracy": 64.9,
+      "ci_lower": 48.8,
+      "ci_upper": 78.2
+    }
+  }
+}

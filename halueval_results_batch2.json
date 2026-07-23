@@ -1,0 +1,275 @@
+[
+  {
+    "question": "Which series based on a Japanese manga did Claudio Moneta star in? ",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Which series based on a Japanese manga did Claudio Moneta star in? ",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Randolph Bromery was a member of a group of airmen that formed which groups of the United States Army Air forces ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Randolph Bromery was a member of a group of airmen that formed which groups of the United States Army Air forces ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "What conference has the most valuable NBA franchise according to Forbes?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": true,
+    "correct": false
+  },
+  {
+    "question": "What conference has the most valuable NBA franchise according to Forbes?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Who designed the hotel that was one of the artificial structure in Bretton Woods, New Hampshire?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Who designed the hotel that was one of the artificial structure in Bretton Woods, New Hampshire?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Mike Moh was cast as Triton in \"Marvel's Inhumans\", an American television series created by Scott Buck for what television network?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Mike Moh was cast as Triton in \"Marvel's Inhumans\", an American television series created by Scott Buck for what television network?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "John Jett won s Super Bowl ring in Super Bowl XXX and another Super Bowl game played in what arena?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "John Jett won s Super Bowl ring in Super Bowl XXX and another Super Bowl game played in what arena?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Princess Maria-Olympia is the only daughter of the eldest son and second child of Constantine II, who was the last king of Greece from 1964 until when?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": true,
+    "correct": false
+  },
+  {
+    "question": "Princess Maria-Olympia is the only daughter of the eldest son and second child of Constantine II, who was the last king of Greece from 1964 until when?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "What is the name of the musical written by this English comedian, author, playwright, actor, director, and writer of \"The Young Ones\" and composed by Andrew Lloyd Webber with lyrics by Glenn Slater?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What is the name of the musical written by this English comedian, author, playwright, actor, director, and writer of \"The Young Ones\" and composed by Andrew Lloyd Webber with lyrics by Glenn Slater?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "The son of the The Marvel Comics Character created by Stan Lee and John Romita Sr in 1967 is what kind of character?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "The son of the The Marvel Comics Character created by Stan Lee and John Romita Sr in 1967 is what kind of character?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Thomas Bangalter recorded compositions for a 2002 French art psychological horror drama film that employs what kind of narrative?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Thomas Bangalter recorded compositions for a 2002 French art psychological horror drama film that employs what kind of narrative?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Letters from a Porcupine was a documentary about a rock band formed where?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Letters from a Porcupine was a documentary about a rock band formed where?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Who directed Julia Stiles in the role that won the  MTV Movie Award for Best Breakthrough Performance?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Who directed Julia Stiles in the role that won the  MTV Movie Award for Best Breakthrough Performance?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Was Flubber or The Sorcerer's Apprentice released first?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Was Flubber or The Sorcerer's Apprentice released first?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "the 1989 Eurovision Song Contest took place in a city situated on the shores of which lake ?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "the 1989 Eurovision Song Contest took place in a city situated on the shores of which lake ?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "What type of group does Umphrey's McGee and Iron Maiden have in common?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "What type of gesture does Donets-Krivoy Rog Soviet Republic and have in common?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What type of gesture does Donets-Krivoy Rog Soviet Republic and have in common?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Who wrote a novel that was adapted into a film which featured the voice of a man who sang in Hindi and other languages?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Who wrote a novel that was adapted into a film which featured the voice of a man who sang in Hindi and other languages?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "What is the title of this South Korean disaster film written and directed by Kim Sung-su that Park Min-ha appeared?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "What is the title of this South Korean disaster film written and directed by Kim Sung-su that Park Min-ha appeared?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": false,
+    "correct": false
+  },
+  {
+    "question": "Moonraker co-starred which voice artist and comedian?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": false,
+    "correct": true
+  },
+  {
+    "question": "Moonraker co-starred which voice artist and comedian?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  },
+  {
+    "question": "Are Woody Allen and Frederick Wiseman both filmmakers?",
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "predicted_hallucination": true,
+    "correct": false
+  },
+  {
+    "question": "Are Woody Allen and Frederick Wiseman both filmmakers?",
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "predicted_hallucination": true,
+    "correct": true
+  }
+]

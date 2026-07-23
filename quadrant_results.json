@@ -1,0 +1,261 @@
+[
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": true,
+    "quadrant": "Flagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": true,
+    "quadrant": "Flagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": true,
+    "quadrant": "Flagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": true,
+    "quadrant": "Flagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": true,
+    "is_consistent": false,
+    "quadrant": "Flagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  },
+  {
+    "answer_type": "faithful",
+    "actual_hallucination": false,
+    "is_flagged": false,
+    "is_consistent": false,
+    "quadrant": "NotFlagged+Inconsistent"
+  },
+  {
+    "answer_type": "hallucinated",
+    "actual_hallucination": true,
+    "is_flagged": false,
+    "is_consistent": true,
+    "quadrant": "NotFlagged+Consistent"
+  }
+]

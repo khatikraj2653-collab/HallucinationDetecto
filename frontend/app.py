@@ -20,6 +20,9 @@ from scoring_utils import compute_final_verdict
 from graph_utils import analyze_answers_parallel
 
 load_dotenv()
+os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "true")
+os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY", "")
+os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGCHAIN_PROJECT", "HallucinationDetector")
 init_db()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))

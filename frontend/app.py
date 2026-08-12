@@ -39,7 +39,7 @@ def load_nli_model():
 
 nli_model = load_nli_model()
 
-st.markdown(
+st.html(
     """
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -116,8 +116,7 @@ hr{ border-color:rgba(139,92,246,0.18) !important; }
 
 footer{visibility:hidden;}
 </style>
-""",
-    unsafe_allow_html=True,
+"""
 )
 
 st.markdown(

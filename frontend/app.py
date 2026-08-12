@@ -57,6 +57,9 @@ html, body, [class*="css"]{ font-family:'Inter',sans-serif; }
 }
 .block-container{ padding-top:2.2rem; max-width:1150px; }
 h1,h2,h3{ font-family:'Space Grotesk',sans-serif !important; color:#FFFFFF !important; }
+header[data-testid="stHeader"]{ background:transparent !important; }
+[data-testid="stDecoration"]{ background:linear-gradient(90deg,var(--violet),var(--cyan)) !important; }
+[data-testid="stToolbar"]{ background:transparent !important; }
 
 /* ---------- Hero ---------- */
 .hd-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(139,92,246,0.14);border:1px solid rgba(139,92,246,0.35);
@@ -82,7 +85,10 @@ h1,h2,h3{ font-family:'Space Grotesk',sans-serif !important; color:#FFFFFF !impo
 .stTabs [aria-selected="true"]{ color:#FFFFFF !important; background:rgba(139,92,246,0.14) !important; }
 
 /* ---------- Cards / inputs ---------- */
-.hd-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:26px 28px;margin:8px 0 22px;backdrop-filter:blur(10px);}
+[data-testid="stVerticalBlockBorderWrapper"]{
+  background:var(--panel) !important;border:1px solid var(--border) !important;border-radius:16px !important;
+  padding:6px 6px !important;backdrop-filter:blur(10px);
+}
 .stTextArea textarea, .stTextInput input{
   background:rgba(15,12,26,0.7) !important;border:1px solid rgba(139,92,246,0.25) !important;border-radius:10px !important;color:var(--ink) !important;
 }
@@ -96,7 +102,6 @@ button[kind="primary"]{
 button[kind="primary"]:hover{ box-shadow:0 0 32px rgba(139,92,246,0.6) !important; transform:translateY(-1px); }
 
 /* ---------- Answer result cards ---------- */
-.hd-ans-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
 .hd-ans-head{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#FFFFFF;font-size:13px;margin-bottom:6px;}
 .hd-ans-text{font-size:12px;color:var(--sub);line-height:1.6;margin-bottom:10px;}
 .hd-claim{font-size:11.5px;color:#C9BCEF;font-style:italic;margin:10px 0 4px;padding-left:10px;border-left:2px solid rgba(139,92,246,0.35);}
@@ -142,11 +147,10 @@ st.write("")
 tab_analyze, tab_paper = st.tabs(["🔍  Analyze", "📄  Research Paper"])
 
 with tab_analyze:
-    st.markdown('<div class="hd-card">', unsafe_allow_html=True)
-    context = st.text_area("Context", height=180, placeholder="Paste the source passage / context here...")
-    question = st.text_input("Question", placeholder="What question should the model answer from this context?")
-    analyze_clicked = st.button("Analyze", type="primary")
-    st.markdown("</div>", unsafe_allow_html=True)
+    with st.container(border=True):
+        context = st.text_area("Context", height=180, placeholder="Paste the source passage / context here...")
+        question = st.text_input("Question", placeholder="What question should the model answer from this context?")
+        analyze_clicked = st.button("Analyze", type="primary")
 
     def split_claims(answer):
         sentences = re.split(r'(?<!\d)\.(?!\d)', answer)
@@ -182,8 +186,7 @@ with tab_analyze:
             cols = st.columns(3)
 
             for i, (ans, col, claim_results) in enumerate(zip(answers, cols, all_results), 1):
-                with col:
-                    st.markdown('<div class="hd-ans-card">', unsafe_allow_html=True)
+                with col, st.container(border=True):
                     st.markdown(f'<div class="hd-ans-head">Answer {i}</div>', unsafe_allow_html=True)
                     st.markdown(f'<div class="hd-ans-text">{ans}</div>', unsafe_allow_html=True)
 
@@ -232,7 +235,6 @@ with tab_analyze:
                     answer_score = round((bad_votes / total_signals) * 100, 1) if total_signals > 0 else 0.0
                     verdict_class = "hd-red" if answer_score >= 67 else "hd-orange" if answer_score >= 34 else "hd-green"
                     st.markdown(f'<div class="hd-verdict {verdict_class}">{answer_score}% flagged</div>', unsafe_allow_html=True)
-                    st.markdown("</div>", unsafe_allow_html=True)
 
             st.divider()
             st.caption("Click any signal badge above to expand its detail. Powered by LangGraph subgraphs with parallel threading — trace visible in LangSmith.")

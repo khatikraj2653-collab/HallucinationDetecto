@@ -119,6 +119,17 @@ button[kind="primary"]:hover{ box-shadow:0 0 32px rgba(139,92,246,0.6) !importan
 .stTable, .stDataFrame{ border-radius:10px; overflow:hidden; }
 hr{ border-color:rgba(139,92,246,0.18) !important; }
 
+/* ---------- Contact ---------- */
+.hd-contact-wrap{margin:18px 0 28px;}
+.hd-contact-title{font-family:'Space Grotesk',sans-serif;font-size:0.85rem;font-weight:700;color:var(--sub);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;}
+.hd-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.hd-contact-grid a{background:var(--bg2);padding:14px 16px;display:flex;flex-direction:column;gap:4px;text-decoration:none;transition:background .15s ease;}
+.hd-contact-grid a:hover{background:rgba(139,92,246,0.14);}
+.hd-contact-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.07em;color:var(--dim);font-weight:600;}
+.hd-contact-value{font-size:12.5px;font-weight:600;color:var(--ink);word-break:break-word;}
+@media (max-width:760px){ .hd-contact-grid{grid-template-columns:1fr 1fr;} }
+@media (max-width:480px){ .hd-contact-grid{grid-template-columns:1fr;} }
+
 footer{visibility:hidden;}
 </style>
 """
@@ -145,6 +156,41 @@ st.markdown(
 
 st.write("")
 tab_analyze, tab_paper = st.tabs(["🔍  Analyze", "📄  Research Paper"])
+
+st.markdown(
+    """
+<div class="hd-contact-wrap">
+  <div class="hd-contact-title">Contact</div>
+  <div class="hd-contact-grid">
+    <a href="mailto:khatikraj2653@gmail.com">
+      <span class="hd-contact-label">Email</span>
+      <span class="hd-contact-value">khatikraj2653@gmail.com</span>
+    </a>
+    <a href="https://www.linkedin.com/in/raj-khatik-6ab086395" target="_blank" rel="noopener">
+      <span class="hd-contact-label">LinkedIn</span>
+      <span class="hd-contact-value">raj-khatik-6ab086395</span>
+    </a>
+    <a href="https://github.com/khatikraj2653-collab" target="_blank" rel="noopener">
+      <span class="hd-contact-label">GitHub</span>
+      <span class="hd-contact-value">khatikraj2653-collab</span>
+    </a>
+    <a href="https://wa.me/447799394985" target="_blank" rel="noopener">
+      <span class="hd-contact-label">Phone / WhatsApp</span>
+      <span class="hd-contact-value">+44 7799 394985</span>
+    </a>
+    <a href="mailto:Raj.Khatik@warwick.ac.uk">
+      <span class="hd-contact-label">University email</span>
+      <span class="hd-contact-value">Raj.Khatik@warwick.ac.uk</span>
+    </a>
+    <a href="https://portfolio-raj.pages.dev" target="_blank" rel="noopener">
+      <span class="hd-contact-label">Portfolio</span>
+      <span class="hd-contact-value">portfolio-raj.pages.dev</span>
+    </a>
+  </div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
 
 with tab_analyze:
     with st.container(border=True):

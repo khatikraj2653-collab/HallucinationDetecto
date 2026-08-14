@@ -32,6 +32,60 @@ DEMO_URL = "https://hallucinationdetecto.streamlit.app"
 
 st.set_page_config(page_title="Hallucination Detector", page_icon="🔮", layout="wide")
 
+# SEO tags injected into the real top-level document (st.markdown runs in
+# Streamlit's own DOM, not a sandboxed iframe, so this is what Google's
+# crawler actually sees for this page's <head>).
+st.markdown("""
+<script>
+(function() {
+  document.title = "Hallucination Detector — LLM Answer Grounding Checker";
+  function setMeta(attr, key, content) {
+    let el = document.querySelector(`meta[${attr}="${key}"]`);
+    if (!el) { el = document.createElement('meta'); el.setAttribute(attr, key); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  }
+  const desc = "Checks whether an LLM's answer is actually grounded in its source text, using multi-model consistency and NLI-based claim verification, built by Raj Tejpal Khatik.";
+  setMeta('name', 'description', desc);
+  setMeta('property', 'og:title', "Hallucination Detector — LLM Answer Grounding Checker");
+  setMeta('property', 'og:description', desc);
+  setMeta('property', 'og:type', 'website');
+  setMeta('property', 'og:url', 'https://hallucinationdetecto.streamlit.app/');
+  setMeta('name', 'twitter:card', 'summary_large_image');
+  setMeta('name', 'twitter:title', "Hallucination Detector — LLM Answer Grounding Checker");
+  setMeta('name', 'twitter:description', desc);
+
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
+  canonical.setAttribute('href', 'https://hallucinationdetecto.streamlit.app/');
+
+  if (!document.getElementById('hallucinationdetector-jsonld')) {
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'hallucinationdetector-jsonld';
+    s.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Hallucination Detector",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "url": "https://hallucinationdetecto.streamlit.app/",
+      "description": desc,
+      "author": {
+        "@type": "Person",
+        "name": "Raj Tejpal Khatik",
+        "sameAs": [
+          "https://www.linkedin.com/in/raj-khatik-6ab086395",
+          "https://github.com/khatikraj2653-collab",
+          "https://portfolio-raj.pages.dev/"
+        ]
+      }
+    });
+    document.head.appendChild(s);
+  }
+})();
+</script>
+""", unsafe_allow_html=True)
+
 if "visit_logged" not in st.session_state:
     st.session_state.visit_logged = True
     log_event("visit", detail="app page")

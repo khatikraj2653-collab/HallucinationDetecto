@@ -17,6 +17,7 @@ from llm_judge import multi_llm_judge, multi_consistency_check
 from consistency_utils import generate_multiple_answers
 from scoring_utils import compute_final_verdict
 from graph_utils import analyze_answers_parallel
+from log_client import log_event
 
 load_dotenv()
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "true")
@@ -30,6 +31,10 @@ SSRN_URL = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7200222"
 DEMO_URL = "https://hallucinationdetecto.streamlit.app"
 
 st.set_page_config(page_title="Hallucination Detector", page_icon="🔮", layout="wide")
+
+if "visit_logged" not in st.session_state:
+    st.session_state.visit_logged = True
+    log_event("visit", detail="app page")
 
 
 @st.cache_resource

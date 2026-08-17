@@ -1,0 +1,42 @@
+name: Keep Streamlit app awake
+
+on:
+  schedule:
+    # Every 3 hours, well inside Streamlit Community Cloud's 12-hour sleep
+    # threshold, so the app never fully hibernates.
+    - cron: '0 */3 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright (Chromium only)
+        run: |
+          npm install playwright@latest
+          npx playwright install --with-deps chromium
+
+      - name: Visit the app to keep it awake
+        env:
+          APP_URL: https://hallucinationdetecto.streamlit.app/
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            try {
+              await page.goto(process.env.APP_URL, { waitUntil: 'networkidle', timeout: 60000 });
+            } catch (e) {
+              console.log('networkidle wait timed out, continuing:', e.message);
+            }
+            // Give the Streamlit websocket session a moment to fully establish.
+            await page.waitForTimeout(5000);
+            await browser.close();
+          })();
+          "

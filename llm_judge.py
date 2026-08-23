@@ -20,7 +20,7 @@ Respond with exactly one word: SUPPORTED, UNSUPPORTED, or UNCLEAR."""
 
 def judge_openai(context, claim):
     response = openai_client.chat.completions.create(
-        model="gpt-5-nano",
+        model="gpt-4.1-nano",
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
         temperature=0
     )
@@ -41,7 +41,7 @@ def judge_gemini(context, claim):
 
 def ask_openai(prompt):
     response = openai_client.chat.completions.create(
-        model="gpt-5-nano",
+        model="gpt-4.1-nano",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )

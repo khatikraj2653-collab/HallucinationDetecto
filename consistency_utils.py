@@ -7,7 +7,7 @@ def generate_multiple_answers(context, question, n=3):
     answers = []
     for _ in range(n):
         response = client.chat.completions.create(
-            model="gpt-5-nano",
+            model="gpt-4.1-nano",
             messages=[
                 {"role": "system", "content": "Answer the question using only the given context."},
                 {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}

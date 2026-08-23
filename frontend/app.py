@@ -4,6 +4,8 @@ os.environ["HF_HUB_DISABLE_XET"] = "1"
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
+import threading
+
 import streamlit as st
 from openai import OpenAI
 from transformers import pipeline
@@ -108,6 +110,7 @@ def load_nli_model():
 
 
 nli_model = load_nli_model()
+nli_model_lock = threading.Lock()
 
 st.html(
     """
@@ -273,7 +276,8 @@ with tab_analyze:
         return [s.strip() for s in sentences if s.strip()]
 
     def check_claim(context, claim):
-        result = nli_model(f"{context}</s></s>{claim}")[0]
+        with nli_model_lock:
+            result = nli_model(f"{context}</s></s>{claim}")[0]
         return result["label"], round(result["score"], 3)
 
     if analyze_clicked:

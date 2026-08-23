@@ -1,6 +1,6 @@
 streamlit>=1.36
 requests
-openai
+openai==2.44.0
 transformers
 torch
 python-dotenv

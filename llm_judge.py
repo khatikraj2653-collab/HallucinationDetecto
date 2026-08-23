@@ -28,7 +28,7 @@ def judge_openai(context, claim):
 
 def judge_groq(context, claim):
     response = groq_client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
         temperature=0
     )
@@ -49,7 +49,7 @@ def ask_openai(prompt):
 
 def ask_groq(prompt):
     response = groq_client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )

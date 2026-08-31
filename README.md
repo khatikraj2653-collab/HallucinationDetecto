@@ -4,6 +4,9 @@ A hallucination detection and evaluation system for LLM outputs, with an evaluat
 
 **Live app:** https://hallucinationdetecto.streamlit.app/
 
+## Demo
+![HallucinationDetector demo](hallucinationdetector-demo.gif)
+
 ## Stack
 - Streamlit (frontend)
 - LangChain (OpenAI, Groq, Google Generative AI backends)

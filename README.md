@@ -4,6 +4,9 @@ A hallucination detection and evaluation system for LLM outputs, with an evaluat
 
 **Live app:** https://hallucinationdetecto.streamlit.app/
 
+## Key results
+Six-signal ensemble (NLI, retrieval grounding, three-model LLM-judge panel, self-consistency) with 72.4-92.2% accuracy across three benchmarks. In a quadrant analysis, "flagged + consistent" claims were 100% real hallucinations, but on only n=4 claims, so treat that figure as indicative. Research paper: SSRN 7200222 (under review).
+
 ## Demo
 ![HallucinationDetector demo](hallucinationdetector-demo.gif)
 

@@ -215,7 +215,7 @@ st.markdown(
 <div class="hd-desc">A multi-method ensemble that flags hallucinated claims by combining <strong>NLI entailment</strong>, <strong>RAG-grounding</strong>, a <strong>three-model LLM judge panel</strong> (OpenAI, Groq, Gemini), and <strong>cross-sample consistency</strong> checking &mdash; run in parallel as a LangGraph state machine, so no single blind spot decides the verdict alone.</div>
 <div class="hd-chips">
   <span class="hd-chip">LangGraph</span><span class="hd-chip">NLI · BART-MNLI</span><span class="hd-chip">RAG · FAISS</span>
-  <span class="hd-chip">GPT-4o Judge</span><span class="hd-chip">Groq Llama-3.3</span><span class="hd-chip">Gemini Judge</span>
+  <span class="hd-chip">GPT-4o-mini Judge</span><span class="hd-chip">Groq gpt-oss-20b Judge</span><span class="hd-chip">Gemini 2.0 Flash Judge</span>
 </div>
 <div class="hd-stats">
   <div><div class="hd-stat-num">6</div><div class="hd-stat-lbl">Detection Signals</div></div>
@@ -485,6 +485,11 @@ entailment (BART-large-MNLI), (2) RAG-grounding (FAISS dense retrieval, threshol
 (3–5) a three-model LLM judge panel (OpenAI GPT-4o, Groq Llama-3.3-70B, Google Gemini), each classifying
 claims as SUPPORTED / UNSUPPORTED / UNCLEAR, and (6) cross-sample consistency, where the same
 three-model panel compares all three sampled answers for stability."""
+    )
+    st.caption(
+        "Note: the live demo's judge panel currently runs gpt-4o-mini (OpenAI), gpt-oss-20b (Groq) and "
+        "gemini-2.0-flash (Google), each with the other two as automatic fallbacks, so live scores can differ "
+        "from the models reported in the evaluation above."
     )
     st.markdown(
         """Each signal contributes one vote; a claim's hallucination score is the proportion of signals flagging it,

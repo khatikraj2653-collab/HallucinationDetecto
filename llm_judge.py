@@ -60,35 +60,55 @@ def ask_gemini(prompt):
     response = model.generate_content(prompt)
     return response.text.strip()
 
-def multi_consistency_check(a1, a2, a3):
+JUDGE_FNS = {"OpenAI": judge_openai, "Groq": judge_groq, "Gemini": judge_gemini}
+ASK_FNS = {"OpenAI": ask_openai, "Groq": ask_groq, "Gemini": ask_gemini}
+
+# slot -> providers to try, in order (primary first, then backups)
+FALLBACK_CHAINS = {
+    "OpenAI": ["OpenAI", "Groq", "Gemini"],
+    "Groq": ["Groq", "OpenAI", "Gemini"],
+    "Gemini": ["Gemini", "OpenAI", "Groq"],
+}
+
+
+def _run_with_fallback(slot, call):
+    """Try each provider in the slot's chain until one succeeds.
+    Returns (result, provider_used). If all fail, result is an ERROR string
+    and provider_used is None."""
+    errors = []
+    for provider in FALLBACK_CHAINS[slot]:
+        try:
+            return call(provider), provider
+        except Exception as e:
+            errors.append(f"{provider}: {e}")
+    return "ERROR: all providers failed (" + "; ".join(errors) + ")", None
+
+
+def multi_consistency_check_detailed(a1, a2, a3):
     from consistency_utils import check_consistency
-    results = {}
-    try:
-        results["OpenAI"] = check_consistency(ask_openai, a1, a2, a3)
-    except Exception as e:
-        results["OpenAI"] = f"ERROR: {e}"
-    try:
-        results["Groq"] = check_consistency(ask_groq, a1, a2, a3)
-    except Exception as e:
-        results["Groq"] = f"ERROR: {e}"
-    try:
-        results["Gemini"] = check_consistency(ask_gemini, a1, a2, a3)
-    except Exception as e:
-        results["Gemini"] = f"ERROR: {e}"
-    return results
+    results, used = {}, {}
+    for slot in FALLBACK_CHAINS:
+        results[slot], used[slot] = _run_with_fallback(
+            slot, lambda p: check_consistency(ASK_FNS[p], a1, a2, a3)
+        )
+    return results, used
+
+
+def multi_consistency_check(a1, a2, a3):
+    return multi_consistency_check_detailed(a1, a2, a3)[0]
+
+
+def multi_llm_judge_detailed(context, claim):
+    """Returns (verdicts, used). verdicts keeps the original slot keys
+    (OpenAI/Groq/Gemini) with plain verdict strings; used maps each slot to
+    the provider that actually answered (differs from the slot on fallback)."""
+    results, used = {}, {}
+    for slot in FALLBACK_CHAINS:
+        results[slot], used[slot] = _run_with_fallback(
+            slot, lambda p: JUDGE_FNS[p](context, claim)
+        )
+    return results, used
+
 
 def multi_llm_judge(context, claim):
-    results = {}
-    try:
-        results["OpenAI"] = judge_openai(context, claim)
-    except Exception as e:
-        results["OpenAI"] = f"ERROR: {e}"
-    try:
-        results["Groq"] = judge_groq(context, claim)
-    except Exception as e:
-        results["Groq"] = f"ERROR: {e}"
-    try:
-        results["Gemini"] = judge_gemini(context, claim)
-    except Exception as e:
-        results["Gemini"] = f"ERROR: {e}"
-    return results
+    return multi_llm_judge_detailed(context, claim)[0]

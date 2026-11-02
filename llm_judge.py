@@ -35,7 +35,7 @@ def judge_groq(context, claim):
     return response.choices[0].message.content.strip().upper()
 
 def judge_gemini(context, claim):
-    model = genai.GenerativeModel("models/gemini-3.1-flash-lite")
+    model = genai.GenerativeModel("gemini-2.0-flash")
     response = model.generate_content(JUDGE_PROMPT.format(context=context, claim=claim))
     return response.text.strip().upper()
 
@@ -49,14 +49,14 @@ def ask_openai(prompt):
 
 def ask_groq(prompt):
     response = groq_client.chat.completions.create(
-        model="openai/gpt-oss-20b",
+        model="llama-3.1-8b-instant",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )
     return response.choices[0].message.content.strip()
 
 def ask_gemini(prompt):
-    model = genai.GenerativeModel("models/gemini-3.1-flash-lite")
+    model = genai.GenerativeModel("gemini-2.0-flash")
     response = model.generate_content(prompt)
     return response.text.strip()
 

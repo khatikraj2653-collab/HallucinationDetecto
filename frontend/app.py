@@ -717,6 +717,56 @@ this paper."""
     st.link_button("📄 Read Live on SSRN ↗", SSRN_URL, type="primary")
 
 st.markdown(
+    """
+<style>
+.hd-sk-wrap{margin:34px 0 8px;}
+.hd-sk-label{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;}
+.hd-sk-title{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-0.3px;}
+.hd-sk-sub{font-size:0.9rem;color:var(--sub);margin-bottom:22px;}
+.hd-sk-chips{display:flex;flex-wrap:wrap;gap:12px;}
+.hd-sk-chip{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.2;color:var(--sub);border:1px solid var(--border);border-radius:4px;padding:11px 20px;background:transparent;transition:border-color .18s,color .18s,transform .18s,box-shadow .18s;}
+.hd-sk-chip:hover{border-color:var(--violet);color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 18px -10px var(--violet);}
+@media (max-width:600px){.hd-sk-chips{gap:8px;}.hd-sk-chip{font-size:11.5px;padding:8px 12px;}}
+</style>
+<div class="hd-sk-wrap" id="skills">
+<div class="hd-sk-label">§ Skills</div>
+<div class="hd-sk-title">Skills</div>
+<div class="hd-sk-sub">The stack behind Hallucination Detector: agents, retrieval, evaluation and data.</div>
+<div class="hd-sk-chips">
+<span class="hd-sk-chip">LangGraph</span>
+<span class="hd-sk-chip">LangChain</span>
+<span class="hd-sk-chip">LangSmith Tracing</span>
+<span class="hd-sk-chip">Generative AI</span>
+<span class="hd-sk-chip">LLM-as-Judge</span>
+<span class="hd-sk-chip">Multi-Model Ensemble</span>
+<span class="hd-sk-chip">NLI · BART-MNLI</span>
+<span class="hd-sk-chip">HuggingFace Transformers</span>
+<span class="hd-sk-chip">RAG</span>
+<span class="hd-sk-chip">FAISS</span>
+<span class="hd-sk-chip">Self-Consistency</span>
+<span class="hd-sk-chip">Prompt Engineering</span>
+<span class="hd-sk-chip">OpenAI GPT-4o-mini</span>
+<span class="hd-sk-chip">Groq</span>
+<span class="hd-sk-chip">Google Gemini</span>
+<span class="hd-sk-chip">Parallel Execution</span>
+<span class="hd-sk-chip">HaluEval</span>
+<span class="hd-sk-chip">TruthfulQA</span>
+<span class="hd-sk-chip">Ablation Studies</span>
+<span class="hd-sk-chip">Confidence Intervals</span>
+<span class="hd-sk-chip">McNemar's Test</span>
+<span class="hd-sk-chip">Inter-Judge Agreement</span>
+<span class="hd-sk-chip">SQLite Logging</span>
+<span class="hd-sk-chip">Python</span>
+<span class="hd-sk-chip">Streamlit</span>
+<span class="hd-sk-chip">Streamlit Community Cloud</span>
+<span class="hd-sk-chip">Git / GitHub</span>
+</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
     f"""
 <div style="margin-top:40px;padding-top:18px;border-top:1px solid rgba(139,92,246,0.15);
 display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">

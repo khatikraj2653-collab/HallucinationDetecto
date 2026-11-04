@@ -21,6 +21,7 @@ from scoring_utils import compute_final_verdict
 from graph_utils import analyze_answers_parallel
 from log_client import log_event
 from evidence3d import render_evidence_3d
+from stackmap3d import render_stack_map
 
 load_dotenv()
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "true")
@@ -766,6 +767,16 @@ st.markdown(
 <div class="hd-sk-label">§ Skills</div>
 <div class="hd-sk-title">Skills</div>
 <div class="hd-sk-sub">The stack behind Hallucination Detector: agents, retrieval, evaluation and data.</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+render_stack_map(height=600)
+
+st.markdown(
+    """
+<div class="hd-sk-wrap" style="margin-top:6px">
 <div class="hd-sk-chips">
 <span class="hd-sk-chip">LangGraph</span>
 <span class="hd-sk-chip">LangChain</span>

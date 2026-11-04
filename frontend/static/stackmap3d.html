@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stack constellation</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif;}
+#skills{--sm-bg:#FBF9F4;--sm-line:#D8D1C0;--sm-ink:#14110F;--sm-muted:#5C554B;--sm-hi:#D6362B;}
+
+.sm-wrap{position:relative;height:460px;margin:26px 0 12px;border:1px solid var(--sm-line);border-radius:10px;background:var(--sm-bg);overflow:hidden;}
+.sm-wrap canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y;}
+.sm-legend{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px 16px;font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--sm-muted);pointer-events:none;}
+.sm-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;}
+.sm-info{min-height:52px;margin:0 0 6px;font-size:14px;line-height:1.6;color:var(--sm-muted);}
+.sm-info strong{color:var(--sm-ink);font-weight:700;}
+.sm-info .sm-hint{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:12px;opacity:.85;}
+.sk-chip.sm-click{cursor:pointer;}
+.sk-chip.sm-sel{border-color:var(--sm-hi) !important;color:var(--sm-ink) !important;}
+@media (max-width:700px){.sm-wrap{height:380px;}}
+
+.sm-wrap{margin-top:0;box-shadow:0 3px 0 #BDB5A1;border-radius:4px;}
+.sm-info{padding:0 2px;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+</head>
+<body>
+<div id="skills">
+<div class="sm-wrap" id="smWrap"><canvas id="smCv" role="img" aria-label="Interactive 3D graph connecting the skills in this project's stack to the layers of its architecture. The same skills are listed below."></canvas><div class="sm-legend"><span><i style="background:#14110F"></i>Layer</span><span><i style="background:#D6362B"></i>Skill</span></div></div>
+<p class="sm-info" id="smInfo" aria-live="polite"></p>
+</div>
+<script>
+/* Stack constellation: 3D graph linking a project's skills to the layers of its architecture.
+   Progressive enhancement: the chip list stays; without WebGL the graph hides itself. */
+(function () {
+  'use strict';
+  var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function mk(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function textSprite(T, text, o) {
+    var fs = o.px * 2, c = document.createElement('canvas'), x = c.getContext('2d');
+    var font = o.weight + ' ' + fs + 'px ' + o.family;
+    x.font = font; var w = Math.ceil(x.measureText(text).width) + 20; c.width = w; c.height = fs + 20;
+    x.font = font; x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.lineJoin = 'round'; x.lineWidth = 8; x.strokeStyle = o.halo; x.strokeText(text, w / 2, c.height / 2 + 1);
+    x.fillStyle = o.color; x.fillText(text, w / 2, c.height / 2 + 1);
+    var tex = new T.CanvasTexture(c); tex.minFilter = T.LinearFilter;
+    var sp = new T.Sprite(new T.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+    sp.scale.set(o.h * w / c.height, o.h, 1); sp.renderOrder = 5; return sp;
+  }
+
+  function build(T, cfg) {
+    var host = document.getElementById(cfg.host), cv = document.getElementById(cfg.canvas), info = document.getElementById(cfg.info);
+    if (!host || !cv || !info) return;
+    var renderer;
+    try { renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { host.style.display = 'none'; info.style.display = 'none'; return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    var C = cfg.colors, F = cfg.fonts;
+    var chips = [].slice.call(document.querySelectorAll(cfg.chipSel || '.sk-chip'));
+    var skillNames = cfg.skills || chips.map(function (c) { return c.textContent.trim(); });
+    var hubById = {}; cfg.hubs.forEach(function (h) { hubById[h.id] = h; });
+
+    var rnd = mulberry(cfg.seed || 5), nodes = [], byId = {}, edges = [], RH = 3.3;
+    function addNode(n) { nodes.push(n); byId[n.id] = n; return n; }
+    cfg.hubs.forEach(function (h, i) {
+      var y = 1 - 2 * (i + 0.5) / cfg.hubs.length, r = Math.sqrt(1 - y * y), phi = i * 2.399963;
+      addNode({ id: 'h:' + h.id, hub: true, label: h.label, key: h.id, p: new T.Vector3(Math.cos(phi) * r * RH, y * RH, Math.sin(phi) * r * RH), r: 0.2 });
+    });
+    var loose = [];
+    skillNames.forEach(function (s) {
+      var links = (cfg.links[s] || []).filter(function (k) { return hubById[k]; });
+      var c = new T.Vector3(); links.forEach(function (k) { c.add(byId['h:' + k].p); }); if (links.length) c.multiplyScalar(1 / links.length);
+      var n = addNode({ id: 's:' + s, hub: false, label: s, links: links, p: c.add(new T.Vector3((rnd() - 0.5) * 2, (rnd() - 0.5) * 2, (rnd() - 0.5) * 2)), r: 0.085 });
+      loose.push(n); links.forEach(function (k) { edges.push({ a: n.id, b: 'h:' + k }); });
+    });
+    for (var it = 0; it < 500; it++) {
+      loose.forEach(function (n) {
+        var f = new T.Vector3(), d, len;
+        n.links.forEach(function (k) { d = byId['h:' + k].p.clone().sub(n.p); len = d.length() || 1; f.addScaledVector(d, (len - (n.links.length > 1 ? 1.8 : 1.5)) / len * 0.02); });
+        nodes.forEach(function (m) {
+          if (m === n) return; d = n.p.clone().sub(m.p); len = d.length() || 0.01;
+          var min = m.hub ? 0.9 : 0.75; if (len < min) f.addScaledVector(d, (min - len) / len * 0.18);
+        });
+        n.p.add(f); if (n.p.length() > 4.6) n.p.setLength(4.6);
+      });
+    }
+
+    var scene = new T.Scene(), cam = new T.PerspectiveCamera(38, 2, 0.1, 100), group = new T.Group(); scene.add(group);
+    var nodeGeo = new T.SphereGeometry(1, 18, 14), hitMeshes = [];
+    nodes.forEach(function (n) {
+      n.mesh = new T.Mesh(nodeGeo, new T.MeshBasicMaterial({ color: n.hub ? C.hub : C.skill, transparent: true }));
+      n.mesh.position.copy(n.p); n.mesh.scale.setScalar(n.r); group.add(n.mesh);
+      var hit = new T.Mesh(nodeGeo, new T.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+      hit.position.copy(n.p); hit.scale.setScalar(n.hub ? 0.42 : 0.3); hit.userData.id = n.id; group.add(hit); hitMeshes.push(hit);
+      n.sp = textSprite(T, n.label, n.hub
+        ? { px: 17, h: 0.36, weight: '700', family: F.hub, color: C.ink, halo: C.bg }
+        : { px: 13, h: 0.26, weight: '500', family: F.skill, color: C.muted, halo: C.bg });
+      n.sp.position.copy(n.p).add(new T.Vector3(0, n.hub ? 0.44 : 0.27, 0)); group.add(n.sp);
+    });
+    var pos = new Float32Array(edges.length * 6);
+    edges.forEach(function (e, i) { var a = byId[e.a].p, b = byId[e.b].p; pos.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 6); });
+    var baseGeo = new T.BufferGeometry(); baseGeo.setAttribute('position', new T.BufferAttribute(pos, 3));
+    var baseLines = new T.LineSegments(baseGeo, new T.LineBasicMaterial({ color: C.line, transparent: true, opacity: 0.5 })); group.add(baseLines);
+    var hiLines = new T.LineSegments(new T.BufferGeometry(), new T.LineBasicMaterial({ color: C.hi, transparent: true, opacity: 1 })); group.add(hiLines);
+
+    var selected = null, hover = null, need = true, visible = false;
+    function litSet(id) { var lit = {}; if (id) { lit[id] = 1; edges.forEach(function (e) { if (e.a === id || e.b === id) { lit[e.a] = 1; lit[e.b] = 1; } }); } return lit; }
+    function apply() {
+      var id = selected || hover, lit = litSet(id);
+      nodes.forEach(function (n) {
+        var on = !id || lit[n.id];
+        n.mesh.material.opacity = on ? 1 : 0.16;
+        n.sp.material.opacity = n.hub ? (on ? 1 : 0.25) : (id && lit[n.id] ? 1 : 0);
+        n.mesh.scale.setScalar(n.r * (n.id === id ? 1.55 : 1));
+      });
+      var sel = edges.filter(function (e) { return id && (e.a === id || e.b === id); }), arr = new Float32Array(sel.length * 6);
+      sel.forEach(function (e, i) { var a = byId[e.a].p, b = byId[e.b].p; arr.set([a.x, a.y, a.z, b.x, b.y, b.z], i * 6); });
+      hiLines.geometry.dispose(); hiLines.geometry = new T.BufferGeometry(); hiLines.geometry.setAttribute('position', new T.BufferAttribute(arr, 3));
+      baseLines.material.opacity = id ? 0.08 : 0.5;
+      chips.forEach(function (c) { var nid = 's:' + c.textContent.trim(); c.classList.toggle('sm-sel', !!id && lit[nid] === 1); c.setAttribute('aria-pressed', selected === nid ? 'true' : 'false'); });
+      need = true;
+    }
+    function renderInfo() {
+      var id = selected || hover; info.textContent = '';
+      if (!id) { info.appendChild(mk('span', 'sm-hint', cfg.hint || 'Select a skill or a layer to see how they connect. Drag to rotate.')); return; }
+      var n = byId[id];
+      info.appendChild(mk('strong', null, n.label));
+      if (n.hub) {
+        var sk = edges.filter(function (e) { return e.b === id; }).map(function (e) { return byId[e.a].label; });
+        info.appendChild(document.createTextNode(' · ' + (hubById[n.key].desc || '') + ' Skills here (' + sk.length + '): ' + sk.join(', ') + '.'));
+      } else {
+        info.appendChild(document.createTextNode(' · supports ' + (n.links.length === 1 ? 'this layer: ' : 'these layers: ') + n.links.map(function (k) { return hubById[k].label; }).join(', ') + '.'));
+      }
+    }
+    function setSel(id) { selected = (selected === id) ? null : id; apply(); renderInfo(); }
+    chips.forEach(function (c) {
+      c.setAttribute('role', 'button'); c.setAttribute('tabindex', '0'); c.setAttribute('aria-pressed', 'false'); c.classList.add('sm-click');
+      var go = function () { setSel('s:' + c.textContent.trim()); };
+      c.addEventListener('click', go); c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+
+    var ry = 0.5, rx = 0.28, tRY = 0.5, tRX = 0.28, dragging = false, lastX = 0, lastY = 0, moved = 0, idleAt = 0;
+    var ray = new T.Raycaster(), ptr = new T.Vector2();
+    function pick(e) {
+      var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      scene.updateMatrixWorld(true); cam.updateMatrixWorld(true);
+      ray.setFromCamera(ptr, cam); var hit = ray.intersectObjects(hitMeshes, false)[0]; return hit ? hit.object.userData.id : null;
+    }
+    cv.addEventListener('pointerdown', function (e) { dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; try { cv.setPointerCapture(e.pointerId); } catch (x) {} cv.style.cursor = 'grabbing'; });
+    cv.addEventListener('pointermove', function (e) {
+      if (dragging) { var dx = e.clientX - lastX, dy = e.clientY - lastY; moved += Math.abs(dx) + Math.abs(dy); tRY += dx * 0.006; tRX = Math.max(-0.7, Math.min(0.9, tRX + dy * 0.004)); lastX = e.clientX; lastY = e.clientY; need = true; return; }
+      var id = pick(e); if (id !== hover) { hover = id; apply(); if (!selected) renderInfo(); } cv.style.cursor = id ? 'pointer' : 'grab';
+    });
+    cv.addEventListener('pointerup', function (e) { dragging = false; cv.style.cursor = 'grab'; idleAt = performance.now() + 3000; if (moved < 5) { var id = pick(e); if (id) setSel(id); else if (selected) setSel(selected); } });
+    cv.addEventListener('pointercancel', function () { dragging = false; });
+    cv.addEventListener('pointerleave', function () { if (hover) { hover = null; apply(); if (!selected) renderInfo(); } });
+
+    function resize() {
+      var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+      renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+      var f = Math.tan(19 * Math.PI / 180); cam.position.set(0, 0, Math.max(7.4 / (f * Math.min(cam.aspect, 1.4)), 12)); need = true;
+    }
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(host); else window.addEventListener('resize', resize);
+    if (window.IntersectionObserver) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) need = true; }, { rootMargin: '120px' }).observe(host); else visible = true;
+    apply(); renderInfo(); resize();
+
+    var last = performance.now();
+    (function frame(now) {
+      requestAnimationFrame(frame);
+      if (!visible) { last = now; return; }
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (!reduce && !dragging && !selected && !hover && now > idleAt) { tRY += dt * 0.16; need = true; }
+      var nry = ry + (tRY - ry) * 0.14, nrx = rx + (tRX - rx) * 0.14;
+      if (Math.abs(nry - ry) > 1e-4 || Math.abs(nrx - rx) > 1e-4) need = true; ry = nry; rx = nrx;
+      if (need) { group.rotation.set(rx, ry, 0); renderer.render(scene, cam); need = false; }
+    })(last);
+  }
+
+  window.initStackMap = function (cfg) {
+    function go() {
+      if (!window.THREE) return false;
+      var fonts = [cfg.fonts.hub, cfg.fonts.skill].map(function (f, i) { return document.fonts && document.fonts.load ? document.fonts.load((i ? '500 ' : '700 ') + '16px ' + f).catch(function () {}) : Promise.resolve(); });
+      Promise.all(fonts).then(function () { try { build(window.THREE, cfg); } catch (e) { console.warn('stackmap', e); } });
+      return true;
+    }
+    if (document.readyState === 'complete') { if (!go()) setTimeout(go, 800); } else window.addEventListener('load', function () { if (!go()) setTimeout(go, 800); });
+  };
+})();
+
+window.initStackMap({"host":"smWrap","canvas":"smCv","info":"smInfo","chipSel":".none","hubs":[{"id":"orch","label":"Orchestration","desc":"A parallel LangGraph pipeline: three sampled answers are split into claims and scored with six signals."},{"id":"signals","label":"Detection signals","desc":"NLI, retrieval grounding, a three-model judge panel and cross-sample self-consistency vote on every claim."},{"id":"judges","label":"LLM judges","desc":"A three-model panel (OpenAI, Groq and Google Gemini) classifies each claim."},{"id":"eval","label":"Evaluation","desc":"Evaluated on three benchmarks, including HaluEval and TruthfulQA, with ablations, confidence intervals and McNemar tests."},{"id":"log","label":"Logging","desc":"Analyses are logged to SQLite."},{"id":"ui","label":"Interface","desc":"A Streamlit app styled as a forensic evidence board, with a WebGL hero."},{"id":"deploy","label":"Deployment","desc":"Hosted on Streamlit Community Cloud, with the source on GitHub."}],"links":{"LangGraph":["orch"],"LangChain":["orch","judges"],"LangSmith Tracing":["orch"],"Generative AI":["judges"],"LLM-as-Judge":["judges","signals"],"Multi-Model Ensemble":["signals","judges"],"NLI · BART-MNLI":["signals"],"HuggingFace Transformers":["signals"],"RAG":["signals"],"FAISS":["signals"],"Self-Consistency":["signals"],"Prompt Engineering":["judges"],"OpenAI GPT-4o-mini":["judges"],"Groq":["judges"],"Google Gemini":["judges"],"Parallel Execution":["orch"],"HaluEval":["eval"],"TruthfulQA":["eval"],"Ablation Studies":["eval"],"Confidence Intervals":["eval"],"McNemar's Test":["eval"],"Inter-Judge Agreement":["eval","judges"],"SQLite Logging":["log"],"Python":["orch","eval","ui"],"Streamlit":["ui"],"Streamlit Community Cloud":["deploy"],"Git / GitHub":["deploy"]},"colors":{"bg":"#FBF9F4","ink":"#14110F","muted":"#5C554B","line":"#A89F8A","hub":"#14110F","skill":"#D6362B","hi":"#D6362B"},"fonts":{"hub":"Newsreader, Georgia, serif","skill":"'IBM Plex Mono', monospace"},"seed":5,"skills":["LangGraph","LangChain","LangSmith Tracing","Generative AI","LLM-as-Judge","Multi-Model Ensemble","NLI · BART-MNLI","HuggingFace Transformers","RAG","FAISS","Self-Consistency","Prompt Engineering","OpenAI GPT-4o-mini","Groq","Google Gemini","Parallel Execution","HaluEval","TruthfulQA","Ablation Studies","Confidence Intervals","McNemar's Test","Inter-Judge Agreement","SQLite Logging","Python","Streamlit","Streamlit Community Cloud","Git / GitHub"]});
+</script>
+</body>
+</html>

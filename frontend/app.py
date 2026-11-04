@@ -20,6 +20,7 @@ from consistency_utils import generate_multiple_answers
 from scoring_utils import compute_final_verdict
 from graph_utils import analyze_answers_parallel
 from log_client import log_event
+from evidence3d import render_evidence_3d
 
 load_dotenv()
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "true")
@@ -165,7 +166,7 @@ header[data-testid="stHeader"]{ background:transparent !important; }
 /* ---------- Cards / inputs ---------- */
 [data-testid="stVerticalBlockBorderWrapper"]{
   background:var(--card) !important;border:1px solid var(--line) !important;border-radius:6px !important;
-  padding:6px 6px !important;box-shadow:0 1px 0 rgba(20,17,15,0.05),0 18px 34px -26px rgba(20,17,15,0.45);
+  padding:6px 6px !important;
 }
 .stTextArea textarea, .stTextInput input{
   background:#FFFEFA !important;border:1px solid var(--line-2) !important;border-radius:4px !important;color:var(--ink) !important;
@@ -214,15 +215,27 @@ hr{ border-color:var(--line-2) !important; }
 .hd-contact-value{font-size:12.5px;font-weight:600;color:var(--ink);word-break:break-word;}
 @media (max-width:760px){ .hd-contact-grid{grid-template-columns:1fr 1fr;} }
 @media (max-width:480px){ .hd-contact-grid{grid-template-columns:1fr;} }
-@media (prefers-reduced-motion:reduce){ .hd-verdict,.hd-claim,.hd-dot{animation:none !important;} }
+/* ---------- 3D depth ---------- */
+.hd-title{text-shadow:1px 1px 0 #DAD3C1,2px 2px 0 #D0C8B3,3px 3px 0 #C6BDA6;}
+.hd-chip{box-shadow:0 2px 0 var(--line-2);}
+[data-testid="stVerticalBlockBorderWrapper"]{
+  box-shadow:0 1px 0 #D8D1C0,0 2px 0 #FBF9F4,0 3px 0 #D3CBB8,0 4px 0 #F4F1EA,0 5px 0 #CFC7B2,0 28px 40px -26px rgba(20,17,15,0.55) !important;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1);
+}
+[data-testid="stVerticalBlockBorderWrapper"]:hover{ transform:translateY(-2px); }
+.hd-verdict{box-shadow:2px 3px 0 rgba(20,17,15,0.18);}
+
+@media (prefers-reduced-motion:reduce){ .hd-verdict,.hd-claim,.hd-dot{animation:none !important;} [data-testid="stVerticalBlockBorderWrapper"]{transition:none;} }
 
 footer{visibility:hidden;}
 </style>
 """
 )
 
-st.markdown(
-    f"""
+hero_l, hero_r = st.columns([6, 5], gap="medium")
+with hero_l:
+    st.markdown(
+        """
 <div class="hd-badge"><span class="hd-dot"></span> LIVE · 6-Signal Ensemble Detection</div>
 <div class="hd-title">Catch What LLMs <em>Make Up</em></div>
 <div class="hd-desc">A multi-method ensemble that flags hallucinated claims by combining <strong>NLI entailment</strong>, <strong>RAG-grounding</strong>, a <strong>three-model LLM judge panel</strong> (OpenAI, Groq, Gemini), and <strong>cross-sample consistency</strong> checking &mdash; run in parallel as a LangGraph state machine, so no single blind spot decides the verdict alone.</div>
@@ -230,6 +243,13 @@ st.markdown(
   <span class="hd-chip">LangGraph</span><span class="hd-chip">NLI · BART-MNLI</span><span class="hd-chip">RAG · FAISS</span>
   <span class="hd-chip">GPT-4o-mini Judge</span><span class="hd-chip">Groq gpt-oss-20b Judge</span><span class="hd-chip">Gemini 2.0 Flash Judge</span>
 </div>
+""",
+        unsafe_allow_html=True,
+    )
+with hero_r:
+    render_evidence_3d(height=400)
+st.markdown(
+    """
 <div class="hd-stats">
   <div><div class="hd-stat-num">6</div><div class="hd-stat-lbl">Detection Signals</div></div>
   <div><div class="hd-stat-num">193</div><div class="hd-stat-lbl">Eval Instances</div></div>
@@ -737,8 +757,9 @@ st.markdown(
 .hd-sk-title{font-family:var(--serif);font-size:1.7rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-0.3px;}
 .hd-sk-sub{font-size:0.9rem;color:var(--sub);margin-bottom:22px;}
 .hd-sk-chips{display:flex;flex-wrap:wrap;gap:12px;}
-.hd-sk-chip{font-family:var(--mono);font-size:13px;line-height:1.2;color:var(--sub);border:1px solid var(--border);border-radius:4px;padding:11px 20px;background:transparent;transition:border-color .18s,color .18s,transform .18s,box-shadow .18s;}
-.hd-sk-chip:hover{border-color:var(--violet);color:var(--ink);transform:translateY(-2px);box-shadow:0 8px 18px -10px var(--violet);}
+.hd-sk-chip{font-family:var(--mono);font-size:13px;line-height:1.2;color:var(--sub);border:1px solid var(--border);border-radius:4px;padding:11px 20px;background:var(--card);box-shadow:0 3px 0 var(--line-2);transition:border-color .18s,color .18s,transform .12s,box-shadow .12s;}
+.hd-sk-chip:hover{border-color:var(--red);color:var(--ink);transform:translateY(-2px);box-shadow:0 5px 0 var(--red-dk);}
+.hd-sk-chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--red-dk);}
 @media (max-width:600px){.hd-sk-chips{gap:8px;}.hd-sk-chip{font-size:11.5px;padding:8px 12px;}}
 </style>
 <div class="hd-sk-wrap" id="skills">

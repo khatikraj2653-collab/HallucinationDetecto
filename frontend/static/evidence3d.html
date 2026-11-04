@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evidence board 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;}
+#wrap{position:relative;width:100%;height:100%;min-height:340px;}
+canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y;}
+canvas:active{cursor:grabbing;}
+.tag{position:absolute;left:4px;top:6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8A8272;pointer-events:none;}
+.tag b{color:#D6362B;font-weight:600;}
+.hint{position:absolute;left:0;right:0;bottom:2px;text-align:center;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8272;pointer-events:none;}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="board" aria-label="3D evidence board: claim cards are scanned by a magnifying glass and stamped verified or flagged. Drag to rotate." role="img"></canvas>
+  <div class="tag"><b>●</b> Evidence board · illustrative</div>
+  <div class="hint">Drag to rotate</div>
+</div>
+<script>
+(function(){
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var CLAIMS = [
+  {t: 'Water boils at 100 °C at sea level.', ok: true, v: [1,1,1,1,1,1]},
+  {t: 'The Eiffel Tower was designed by Leonardo da Vinci.', ok: false, v: [0,0,0,0,1,0]},
+  {t: 'Insulin is produced by the pancreas.', ok: true, v: [1,1,1,1,1,0]},
+  {t: 'The Great Wall of China is visible from the Moon.', ok: false, v: [0,0,1,0,0,0]},
+  {t: 'Paris is the capital of France.', ok: true, v: [1,1,1,1,1,1]},
+  {t: 'Einstein won the Nobel Prize for relativity.', ok: false, v: [0,1,0,0,0,0]}
+];
+var INK = '#14110F', PAPER = '#FBF9F4', DIM = '#8A8272', RED = '#D6362B', GREEN = '#1F8A5B';
+var SERIF = "italic 600 38px Newsreader, Georgia, serif", MONO = "600 22px 'IBM Plex Mono', Menlo, monospace";
+
+function cv2(w, h){ var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function wrapText(x, text, maxW, lineH, y0, ctx){
+  var words = text.split(' '), line = '', y = y0;
+  words.forEach(function(w){ var test = line ? line + ' ' + w : w; if (ctx.measureText(test).width > maxW && line) { ctx.fillText(line, x, y); line = w; y += lineH; } else line = test; });
+  ctx.fillText(line, x, y);
+}
+function frontTex(i){
+  var c = cv2(512, 660), x = c.getContext('2d');
+  x.fillStyle = PAPER; x.fillRect(0, 0, 512, 660);
+  x.strokeStyle = '#D8D1C0'; x.lineWidth = 4; x.strokeRect(10, 10, 492, 640);
+  x.fillStyle = DIM; x.font = MONO; x.textBaseline = 'alphabetic'; x.fillText('CLAIM 0' + (i + 1), 38, 62);
+  x.fillStyle = INK; x.fillRect(38, 84, 436, 4);
+  x.fillStyle = INK; x.font = SERIF; wrapText(38, CLAIMS[i].t, 436, 52, 160, x);
+  x.fillStyle = DIM; x.font = MONO; x.fillText('SIGNAL VOTES', 38, 470);
+  for (var k = 0; k < 6; k++) { x.fillStyle = CLAIMS[i].v[k] ? GREEN : RED; x.fillRect(38 + k * 72, 492, 56, 56); x.fillStyle = '#FBF9F4'; x.font = "600 26px 'IBM Plex Mono', monospace"; x.fillText(CLAIMS[i].v[k] ? '✓' : '✗', 52 + k * 72, 530); }
+  x.fillStyle = DIM; x.font = "500 18px 'IBM Plex Mono', monospace"; x.fillText('NLI · RAG · 3 JUDGES · CONSISTENCY', 38, 610);
+  return c;
+}
+function backTex(){
+  var c = cv2(256, 330), x = c.getContext('2d');
+  x.fillStyle = '#F1EDE0'; x.fillRect(0, 0, 256, 330);
+  x.fillStyle = 'rgba(20,17,15,.12)'; for (var a = 18; a < 256; a += 22) for (var b = 18; b < 330; b += 22) x.fillRect(a, b, 2, 2);
+  x.strokeStyle = '#D8D1C0'; x.lineWidth = 3; x.strokeRect(6, 6, 244, 318);
+  x.fillStyle = DIM; x.font = "600 20px 'IBM Plex Mono', monospace"; x.textAlign = 'center'; x.fillText('CASE FILE', 128, 170);
+  return c;
+}
+function stampTex(ok){
+  var c = cv2(512, 200), x = c.getContext('2d'), col = ok ? GREEN : RED;
+  x.strokeStyle = col; x.fillStyle = col; x.lineWidth = 12;
+  x.beginPath(); x.moveTo(26, 8); x.lineTo(486, 8); x.quadraticCurveTo(504, 8, 504, 26); x.lineTo(504, 174); x.quadraticCurveTo(504, 192, 486, 192); x.lineTo(26, 192); x.quadraticCurveTo(8, 192, 8, 174); x.lineTo(8, 26); x.quadraticCurveTo(8, 8, 26, 8); x.stroke();
+  x.font = "600 92px 'IBM Plex Mono', monospace"; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(ok ? 'VERIFIED' : 'FLAGGED', 256, 104);
+  return c;
+}
+function glowTexC(c0, c1){ var c = cv2(128, 128), x = c.getContext('2d'), g = x.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, c0); g.addColorStop(1, c1); x.fillStyle = g; x.fillRect(0, 0, 128, 128); return c; }
+
+function start(){
+  var T = window.THREE, cv = document.getElementById('board'), wrap = document.getElementById('wrap'), renderer;
+  if (!T) { cv.style.display = 'none'; return; }
+  try { renderer = new T.WebGLRenderer({canvas: cv, antialias: true, alpha: true}); } catch (e) { cv.style.display = 'none'; return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputEncoding = T.sRGBEncoding;
+  var scene = new T.Scene(), camera = new T.PerspectiveCamera(30, 1, 0.1, 100);
+  scene.add(new T.HemisphereLight(0xffffff, 0xd8d1c0, 0.95));
+  var key = new T.DirectionalLight(0xffffff, 0.55); key.position.set(-3, 5, 7); scene.add(key);
+  var maxAniso = renderer.capabilities.getMaxAnisotropy();
+  function tex(c){ var t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = maxAniso; return t; }
+
+  var CW = 1.95, CH = 2.5, CT = 0.05, R = 2.55, N = CLAIMS.length, STEP = Math.PI * 2 / N;
+  var stageG = new T.Group(); scene.add(stageG);
+  var ringG = new T.Group(); stageG.add(ringG);
+  var edge = new T.MeshStandardMaterial({color: 0xE4DECD, roughness: 0.9});
+  var back = new T.MeshStandardMaterial({map: tex(backTex()), roughness: 0.9});
+  var cards = [];
+  CLAIMS.forEach(function(cl, i){
+    var a = i * STEP;
+    var g = new T.Group(); g.position.set(Math.sin(a) * R, 0, Math.cos(a) * R); g.rotation.y = a; ringG.add(g);
+    var front = new T.MeshStandardMaterial({map: tex(frontTex(i)), roughness: 0.85});
+    var box = new T.Mesh(new T.BoxGeometry(CW, CH, CT), [edge, edge, edge, edge, front, back]); g.add(box);
+    var stamp = new T.Mesh(new T.PlaneGeometry(1.5, 0.586), new T.MeshBasicMaterial({map: tex(stampTex(cl.ok)), transparent: true, depthWrite: false, opacity: 0}));
+    stamp.position.set(0, -0.42, CT / 2 + 0.012); stamp.rotation.z = -0.16; g.add(stamp);
+    cards.push({g: g, stamp: stamp, s: 0});
+  });
+
+  /* floor: soft contact shadow + thin ring */
+  var shadow = new T.Mesh(new T.PlaneGeometry(5.6, 5.6), new T.MeshBasicMaterial({map: tex(glowTexC('rgba(20,17,15,.34)', 'rgba(20,17,15,0)')), transparent: true, depthWrite: false}));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = -CH / 2 - 0.3; stageG.add(shadow);
+  var floorRing = new T.Mesh(new T.RingGeometry(R + 0.5, R + 0.54, 96), new T.MeshBasicMaterial({color: 0x14110F, transparent: true, opacity: 0.35, side: T.DoubleSide}));
+  floorRing.rotation.x = -Math.PI / 2; floorRing.position.y = -CH / 2 - 0.29; stageG.add(floorRing);
+
+  /* scanner: red beam sweeping the front card + magnifying glass */
+  var beam = new T.Mesh(new T.PlaneGeometry(CW + 0.4, 0.07), new T.MeshBasicMaterial({color: 0xD6362B, transparent: true, opacity: 0}));
+  var beamGlow = new T.Mesh(new T.PlaneGeometry(CW + 0.4, 0.7), new T.MeshBasicMaterial({map: tex(glowTexC('rgba(214,54,43,.5)', 'rgba(214,54,43,0)')), transparent: true, depthWrite: false, opacity: 0}));
+  beam.position.z = R + CT / 2 + 0.05; beamGlow.position.z = R + CT / 2 + 0.04; stageG.add(beam); stageG.add(beamGlow);
+  var lens = new T.Group(); stageG.add(lens);
+  var rim = new T.MeshStandardMaterial({color: 0x14110F, metalness: 0.5, roughness: 0.35});
+  lens.add(new T.Mesh(new T.TorusGeometry(0.62, 0.075, 16, 56), rim));
+  var glass = new T.Mesh(new T.CircleGeometry(0.62, 40), new T.MeshBasicMaterial({color: 0xFFFFFF, transparent: true, opacity: 0.16, depthWrite: false})); glass.position.z = 0.01; lens.add(glass);
+  var handle = new T.Mesh(new T.CylinderGeometry(0.065, 0.085, 0.95, 18), rim); handle.position.set(0.76, -0.76, 0); handle.rotation.z = Math.PI / 4; lens.add(handle);
+  var cap = new T.Mesh(new T.SphereGeometry(0.1, 16, 12), new T.MeshStandardMaterial({color: 0xD6362B, roughness: 0.4})); cap.position.set(1.1, -1.1, 0); lens.add(cap);
+  lens.position.set(1.55, 1.2, R + 0.75);
+
+  function resize(){
+    var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    var d = Math.max(10.4, 6.5 / (0.536 * camera.aspect));
+    camera.position.set(0, 1.6, d); camera.lookAt(0, -0.05, 0); camera.updateProjectionMatrix();
+  }
+  resize();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(wrap); else window.addEventListener('resize', resize);
+
+  /* drag to turn (springs back), pointer tilt */
+  var viewYaw = 0, vel = 0, drag = false, lx = 0, tiltT = 0.08, tilt = 0.08;
+  cv.addEventListener('pointerdown', function(e){ drag = true; lx = e.clientX; vel = 0; try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
+  cv.addEventListener('pointermove', function(e){
+    if (drag) { var dx = e.clientX - lx; lx = e.clientX; viewYaw += dx * 0.01; vel = dx * 0.01; }
+    else if (!reduce && e.pointerType !== 'touch') { var r = cv.getBoundingClientRect(); tiltT = 0.08 + ((e.clientY - r.top) / r.height - 0.5) * 0.3; }
+  });
+  cv.addEventListener('pointerup', function(){ drag = false; }); cv.addEventListener('pointercancel', function(){ drag = false; });
+  cv.addEventListener('pointerleave', function(){ tiltT = 0.08; });
+
+  var clock = new T.Clock(), t = reduce ? 2.0 : 0, visible = true, CYC = 3.6;
+  if (window.IntersectionObserver) new IntersectionObserver(function(en){ visible = en[0].isIntersecting; }).observe(wrap);
+  function clamp(v){ return Math.max(0, Math.min(1, v)); }
+  function ease(x){ x = clamp(x); return x * x * (3 - 2 * x); }
+  if (reduce) cards.forEach(function(c){ c.s = 1; c.stamp.material.opacity = 1; });
+
+  function frame(){
+    requestAnimationFrame(frame);
+    if (!visible || document.hidden) return;
+    var dt = Math.min(clock.getDelta(), 0.05); if (!reduce) t += dt;
+    var idx = Math.floor(t / CYC), tl = t - idx * CYC, cur = idx % N;
+
+    var rotP = reduce ? 0 : ease((tl - 2.7) / 0.9);       // rotate to the next card at the end of each cycle
+    ringG.rotation.y = -(idx + rotP) * STEP;
+    ringG.position.y = Math.sin(t * 1.2) * 0.05;
+
+    var sc = clamp((tl - 0.25) / 1.3), scanning = !reduce && tl > 0.25 && tl < 1.55;
+    var by = CH / 2 - ease(sc) * CH + ringG.position.y;
+    var bo = scanning ? Math.min(1, (tl - 0.25) * 6, (1.55 - tl) * 6) : 0;
+    beam.position.y = by; beamGlow.position.y = by; beam.material.opacity = 0.9 * bo; beamGlow.material.opacity = bo;
+    var tx = scanning ? 0.35 + Math.sin(t * 3) * 0.25 : 1.55, ty = scanning ? by : 1.2 + Math.sin(t * 1.3) * 0.1;
+    lens.position.x += (tx - lens.position.x) * 0.12; lens.position.y += (ty - lens.position.y) * 0.12;
+    lens.rotation.z = Math.sin(t * 2) * 0.06; lens.rotation.y = Math.sin(t * 1.1) * 0.12;
+
+    if (!reduce) cards.forEach(function(c, i){
+      if (i === cur) { c.s = tl < 1.55 ? 0 : clamp((tl - 1.55) / 0.35); }
+      var e = ease(c.s), over = c.s > 0 && c.s < 1 ? 1 + (1 - e) * 0.9 : 1;
+      c.stamp.material.opacity = e; c.stamp.scale.setScalar(over);
+    });
+
+    if (!drag) { viewYaw += vel; vel *= 0.92; viewYaw *= 0.97; }
+    tilt += (tiltT - tilt) * 0.06;
+    stageG.rotation.y = viewYaw; stageG.rotation.x = tilt;
+    renderer.render(scene, camera);
+    cv.dataset.ready = '1';
+  }
+  frame();
+}
+var booted = false;
+function boot(){ if (booted) return; booted = true; if (window.THREE) start(); else window.addEventListener('load', start); }
+var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('italic 600 38px Newsreader'), document.fonts.load("600 22px 'IBM Plex Mono'")]).catch(function(){}) : Promise.resolve();
+fonts.then(boot); setTimeout(boot, 2500);
+})();
+</script>
+</body>
+</html>

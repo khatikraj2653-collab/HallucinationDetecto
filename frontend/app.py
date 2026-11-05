@@ -8,25 +8,28 @@ import threading
 
 import streamlit as st
 
-# Full-screen loader shown IMMEDIATELY so users don't see a blank page while
-# heavy imports (transformers / torch / NLI model) run on first visit.
-# Cleared at the end of the script.
+# Full-screen loader on FIRST visit only (hides heavy transformers/torch
+# import cost). Subsequent reruns (Analyze clicks) show a tiny inline
+# spinner so clicking Analyze doesn't black out the whole page while
+# the LLM judges and NLI model run.
 _loading_placeholder = st.empty()
-_loading_placeholder.markdown(
-    """
-    <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-                background:#0F1115;z-index:999999;flex-direction:column;gap:14px;">
-      <div style="width:44px;height:44px;border:3px solid rgba(167,139,250,.2);
-                  border-top-color:#A78BFA;border-radius:50%;
-                  animation:hd-spin 0.9s linear infinite;"></div>
-      <div style="color:#C7D1DF;font-family:Inter,sans-serif;font-size:14px;">
-        Loading Hallucination Detector…
-      </div>
-      <style>@keyframes hd-spin{to{transform:rotate(360deg)}}</style>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+if "_hd_landing_loader_shown" not in st.session_state:
+    st.session_state._hd_landing_loader_shown = True
+    _loading_placeholder.markdown(
+        """
+        <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+                    background:#0F1115;z-index:999999;flex-direction:column;gap:14px;">
+          <div style="width:44px;height:44px;border:3px solid rgba(167,139,250,.2);
+                      border-top-color:#A78BFA;border-radius:50%;
+                      animation:hd-spin 0.9s linear infinite;"></div>
+          <div style="color:#C7D1DF;font-family:Inter,sans-serif;font-size:14px;">
+            Loading Hallucination Detector…
+          </div>
+          <style>@keyframes hd-spin{to{transform:rotate(360deg)}}</style>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 from openai import OpenAI
 from transformers import pipeline

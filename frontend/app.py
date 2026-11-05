@@ -7,6 +7,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import threading
 
 import streamlit as st
+import sys as _sys, os as _os
+_sys.path.append(_os.path.dirname(_os.path.abspath(__file__)))
+from keyboard import bind_ctrl_enter_submit
+bind_ctrl_enter_submit()
 
 # Full-screen loader on FIRST visit only (hides heavy transformers/torch
 # import cost). Subsequent reruns (Analyze clicks) show a tiny inline

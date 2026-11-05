@@ -268,7 +268,7 @@ with hero_l:
 <div class="hd-desc">A multi-method ensemble that flags hallucinated claims by combining <strong>NLI entailment</strong>, <strong>RAG-grounding</strong>, a <strong>three-model LLM judge panel</strong> (OpenAI, Groq, Gemini), and <strong>cross-sample consistency</strong> checking &mdash; run in parallel as a LangGraph state machine, so no single blind spot decides the verdict alone.</div>
 <div class="hd-chips">
   <span class="hd-chip">LangGraph</span><span class="hd-chip">NLI · BART-MNLI</span><span class="hd-chip">RAG · FAISS</span>
-  <span class="hd-chip">GPT-4o-mini Judge</span><span class="hd-chip">Groq gpt-oss-20b Judge</span><span class="hd-chip">Gemini 2.0 Flash Judge</span>
+  <span class="hd-chip">GPT-4o-mini Judge</span><span class="hd-chip">Groq Llama 3.3 70B Judge</span><span class="hd-chip">Gemini 2.0 Flash Judge</span>
 </div>
 """,
         unsafe_allow_html=True,
@@ -327,8 +327,22 @@ st.markdown(
 
 with tab_analyze:
     with st.container(border=True):
-        context = st.text_area("Context", height=180, placeholder="Paste the source passage / context here...")
-        question = st.text_input("Question", placeholder="What question should the model answer from this context?")
+        context = st.text_area(
+            "Context",
+            height=180,
+            placeholder=(
+                "Paste the source passage here — a paragraph from an article, "
+                "Wikipedia, a research paper, a document excerpt, etc.\n\n"
+                "Example:\n"
+                "The Eiffel Tower was designed by Gustave Eiffel and completed in 1889 "
+                "for the World's Fair in Paris. It stands 330 metres tall and was the "
+                "world's tallest man-made structure for 41 years."
+            ),
+        )
+        question = st.text_input(
+            "Question",
+            placeholder="A specific factual question answerable from the context above — e.g. When was the Eiffel Tower built?",
+        )
         analyze_clicked = st.button("Analyze", type="primary")
 
     def split_claims(answer):
@@ -361,6 +375,15 @@ with tab_analyze:
     if analyze_clicked:
         if not context or not question:
             st.warning("Please fill in both Context and Question.")
+        elif len(context.strip().split()) < 5 or len(question.strip().split()) < 2:
+            st.warning(
+                "⚠️ Context and Question look very short. This tool is designed to fact-check "
+                "LLM answers against a **source passage** (a paragraph, article excerpt, or document "
+                "snippet), not casual greetings. Try pasting a real passage (e.g. a few sentences from "
+                "Wikipedia, a news article, or research paper) and asking a specific factual question "
+                "about it — e.g. context: '*The Eiffel Tower was built in 1889 and is 330 metres tall.*', "
+                "question: '*When was the Eiffel Tower built?*'"
+            )
         else:
             st.markdown(f"##### 🌳 Context")
             st.caption(f"↳ {question}")
@@ -565,7 +588,7 @@ claims as SUPPORTED / UNSUPPORTED / UNCLEAR, and (6) cross-sample consistency, w
 three-model panel compares all three sampled answers for stability."""
     )
     st.caption(
-        "Note: the live demo's judge panel currently runs gpt-4o-mini (OpenAI), gpt-oss-20b (Groq) and "
+        "Note: the live demo's judge panel currently runs gpt-4o-mini (OpenAI), llama-3.3-70b-versatile (Groq) and "
         "gemini-2.0-flash (Google), each with the other two as automatic fallbacks, so live scores can differ "
         "from the models reported in the evaluation above."
     )

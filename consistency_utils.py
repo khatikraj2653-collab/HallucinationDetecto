@@ -25,12 +25,24 @@ Answer 2: {a2}
 
 Answer 3: {a3}
 
-List any specific facts (names, numbers, dates) that appear in only 1 or 2 of the answers, but not all 3. These inconsistent facts are likely unreliable.
+Your task: identify SPECIFIC factual disagreements between the answers — only names, numbers, dates, or explicit claims that CONTRADICT each other across answers.
 
-If all 3 answers agree on all facts, respond with exactly: CONSISTENT
+IMPORTANT rules:
+- Trivial differences in wording, phrasing, length, greeting style, capitalization, or punctuation are NOT inconsistencies. Respond CONSISTENT.
+- Different politeness ("Hello!" vs "hello" vs "Hi there!") is NOT an inconsistency. Respond CONSISTENT.
+- An answer being shorter / more concise than another is NOT an inconsistency.
+- Only flag genuine factual conflicts: different names for the same entity, contradicting numbers, contradicting dates, one answer asserting X and another asserting NOT X.
+- If none of the answers contain extractable facts (e.g. they're all generic greetings, refusals, or "I don't know" style replies), respond CONSISTENT.
+
+If there are NO genuine factual contradictions, respond with exactly: CONSISTENT
 
 Otherwise, list the inconsistent facts, one per line."""
 
 def check_consistency(judge_fn, a1, a2, a3):
+    # Shortcut: if all three answers are identical (case/whitespace normalised),
+    # they're trivially consistent — skip the LLM call entirely.
+    norm = [(x or "").strip().lower() for x in (a1, a2, a3)]
+    if norm[0] == norm[1] == norm[2]:
+        return "CONSISTENT"
     prompt = CONSISTENCY_PROMPT.format(a1=a1, a2=a2, a3=a3)
     return judge_fn(prompt)

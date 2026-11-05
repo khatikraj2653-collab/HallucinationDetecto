@@ -334,9 +334,57 @@ st.markdown(
 
 with tab_analyze:
     with st.container(border=True):
+        # "Try a sample" quick-start chips — pre-fill known-good inputs
+        # so first-time visitors can see a real analysis in one click.
+        _SAMPLES = {
+            "🗼 Eiffel Tower (supported fact)": {
+                "context": (
+                    "The Eiffel Tower was designed by Gustave Eiffel and completed in 1889 "
+                    "for the World's Fair in Paris. It stands 330 metres tall and was the "
+                    "world's tallest man-made structure for 41 years."
+                ),
+                "question": "When was the Eiffel Tower built and how tall is it?",
+            },
+            "🏔️ Everest (hallucination test)": {
+                "context": (
+                    "Mount Everest is the highest mountain in the world above sea level, "
+                    "located in the Mahalangur Himal sub-range of the Himalayas. Its "
+                    "elevation is 8,848.86 metres."
+                ),
+                "question": "Who was the first person to climb Mount Everest and in what year?",
+            },
+            "⚛️ CRISPR (supported)": {
+                "context": (
+                    "CRISPR-Cas9 is a genome editing technology that allows researchers to "
+                    "add, remove, or alter sections of DNA. It was adapted from a natural "
+                    "defense mechanism in bacteria. Jennifer Doudna and Emmanuelle Charpentier "
+                    "were awarded the 2020 Nobel Prize in Chemistry for its development."
+                ),
+                "question": "Who won the Nobel Prize for CRISPR and in what year?",
+            },
+        }
+        _sample_picked = None
+        st.markdown(
+            "<div style='font-size:11px;color:#9A9A9A;letter-spacing:0.08em;"
+            "text-transform:uppercase;margin:4px 0 6px'>Or try a sample</div>",
+            unsafe_allow_html=True,
+        )
+        _sc = st.columns(len(_SAMPLES))
+        for _i, (_label, _s) in enumerate(_SAMPLES.items()):
+            with _sc[_i]:
+                if st.button(_label, key=f"_hd_sample_{_i}", use_container_width=True):
+                    st.session_state["_hd_prefill_ctx"] = _s["context"]
+                    st.session_state["_hd_prefill_q"] = _s["question"]
+                    _sample_picked = True
+
+        # If a sample was just picked, use it as the default values this run
+        _default_ctx = st.session_state.pop("_hd_prefill_ctx", "") if _sample_picked else st.session_state.get("_hd_ctx_last", "")
+        _default_q = st.session_state.pop("_hd_prefill_q", "") if _sample_picked else st.session_state.get("_hd_q_last", "")
+
         context = st.text_area(
             "Context",
             height=180,
+            value=_default_ctx,
             placeholder=(
                 "Paste the source passage here — a paragraph from an article, "
                 "Wikipedia, a research paper, a document excerpt, etc.\n\n"
@@ -345,11 +393,16 @@ with tab_analyze:
                 "for the World's Fair in Paris. It stands 330 metres tall and was the "
                 "world's tallest man-made structure for 41 years."
             ),
+            key="hd_context_input",
         )
         question = st.text_input(
             "Question",
+            value=_default_q,
             placeholder="A specific factual question answerable from the context above — e.g. When was the Eiffel Tower built?",
+            key="hd_question_input",
         )
+        st.session_state["_hd_ctx_last"] = context
+        st.session_state["_hd_q_last"] = question
         analyze_clicked = st.button("Analyze", type="primary")
 
     def split_claims(answer):

@@ -335,9 +335,27 @@ with tab_analyze:
         sentences = re.split(r'(?<!\d)\.(?!\d)', answer)
         return [s.strip() for s in sentences if s.strip()]
 
+    def _normalize_for_nli(text: str) -> str:
+        """Normalize punctuation/casing so BART-MNLI isn't thrown by trivial
+        formatting differences between a short lowercase context and a
+        properly-capitalized model answer. We preserve meaning fully — just
+        add sentence-case and a terminating period when they're missing."""
+        t = (text or "").strip()
+        if not t:
+            return t
+        if t[-1] not in ".!?":
+            t = t + "."
+        # Sentence-case only if the whole string is lowercase (so we don't
+        # mangle things like "ASML Holding" or "The Prime Minister of India")
+        if t == t.lower():
+            t = t[0].upper() + t[1:]
+        return t
+
     def check_claim(context, claim):
+        c_norm = _normalize_for_nli(context)
+        k_norm = _normalize_for_nli(claim)
         with nli_model_lock:
-            result = nli_model(f"{context}</s></s>{claim}")[0]
+            result = nli_model(f"{c_norm}</s></s>{k_norm}")[0]
         return result["label"], round(result["score"], 3)
 
     if analyze_clicked:

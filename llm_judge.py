@@ -10,13 +10,30 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-JUDGE_PROMPT = """You are a fact-checking judge. Given a source context and a claim, determine if the claim is supported by the context.
+JUDGE_PROMPT = """You are a fact-checking judge. Decide whether the CLAIM is logically supported by the CONTEXT.
 
 Context: {context}
 
 Claim: {claim}
 
+Scoring rules:
+- SUPPORTED: The claim's core assertion is directly stated OR clearly implied by the context. Ignore trivial differences in capitalization, punctuation, spacing, word order, articles ("the", "a"), minor paraphrasing, or additional non-contradictory elaboration. If the context literally states the same fact in different wording, that is SUPPORTED.
+- UNSUPPORTED: The claim directly contradicts the context, OR asserts a new factual detail that cannot be derived or paraphrased from the context.
+- UNCLEAR: The context genuinely does not contain enough information to determine support or contradiction.
+
+Bias toward SUPPORTED when the claim is essentially a rephrasing of the context. Reserve UNSUPPORTED for real contradictions or clearly unsupported new facts.
+
 Respond with exactly one word: SUPPORTED, UNSUPPORTED, or UNCLEAR."""
+
+def _parse_verdict(raw: str) -> str:
+    """Pick the first SUPPORTED/UNSUPPORTED/UNCLEAR token from a judge
+    response. Handles trailing punctuation, brief reasoning, and quotes."""
+    txt = (raw or "").strip().upper()
+    for word in txt.replace(".", " ").replace(",", " ").replace('"', " ").split():
+        if word in ("SUPPORTED", "UNSUPPORTED", "UNCLEAR"):
+            return word
+    return txt or "UNCLEAR"
+
 
 def judge_openai(context, claim):
     response = openai_client.chat.completions.create(
@@ -24,20 +41,22 @@ def judge_openai(context, claim):
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
         temperature=0
     )
-    return response.choices[0].message.content.strip().upper()
+    return _parse_verdict(response.choices[0].message.content)
 
 def judge_groq(context, claim):
+    # Upgraded from gpt-oss-20b (noisy, over-flagged simple paraphrases) to
+    # Llama 3.3 70B which follows the rubric far more reliably.
     response = groq_client.chat.completions.create(
-        model="openai/gpt-oss-20b",
+        model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
         temperature=0
     )
-    return response.choices[0].message.content.strip().upper()
+    return _parse_verdict(response.choices[0].message.content)
 
 def judge_gemini(context, claim):
     model = genai.GenerativeModel("gemini-2.0-flash")
     response = model.generate_content(JUDGE_PROMPT.format(context=context, claim=claim))
-    return response.text.strip().upper()
+    return _parse_verdict(response.text)
 
 def ask_openai(prompt):
     response = openai_client.chat.completions.create(

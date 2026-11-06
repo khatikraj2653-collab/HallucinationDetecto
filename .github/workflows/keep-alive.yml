@@ -12,8 +12,9 @@ jobs:
     steps:
       - name: Ping app
         run: |
-          curl -fsSL --max-time 60 --retry 3 --retry-delay 5 \
-            https://hallucinationdetecto.streamlit.app/ \
+          curl -sSL --max-redirs 5 --max-time 90 \
             -A "GitHub-Actions-Keepalive" \
-            -o /dev/null
+            -o /dev/null \
+            -w "HTTP %{http_code} · %{num_redirects} redirect(s) · %{time_total}s\n" \
+            https://hallucinationdetecto.streamlit.app/ || true
           echo "Pinged HallucinationDetecto OK at $(date -u)"

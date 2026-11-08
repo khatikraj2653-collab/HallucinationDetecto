@@ -2,19 +2,66 @@ name: Keep Streamlit app awake
 
 on:
   schedule:
+    # Every 3 hours. A plain HTTP ping doesn't count as "activity" on
+    # Streamlit Community Cloud — the app's inactivity timer is based on
+    # real WebSocket sessions. So we open the page in headless Chromium,
+    # click the "wake" button if we land on the Zzzz screen, and hold the
+    # session for ~45s so Streamlit registers an active user.
     - cron: '45 */3 * * *'
   workflow_dispatch: {}
 
 jobs:
-  ping:
+  keep-awake:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 8
+    env:
+      APP_URL: https://hallucinationdetecto.streamlit.app/
     steps:
-      - name: Ping app
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright Chromium
         run: |
-          curl -sSL --max-redirs 5 --max-time 90 \
-            -A "GitHub-Actions-Keepalive" \
-            -o /dev/null \
-            -w "HTTP %{http_code} · %{num_redirects} redirect(s) · %{time_total}s\n" \
-            https://hallucinationdetecto.streamlit.app/ || true
-          echo "Pinged HallucinationDetecto OK at $(date -u)"
+          npm init -y >/dev/null 2>&1
+          npm install --no-audit --no-fund playwright@1.49.1 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Open app, wake if needed, hold session
+        run: |
+          cat > wake.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          const url = process.env.APP_URL;
+          const browser = await chromium.launch();
+          const ctx = await browser.newContext({
+            userAgent:
+              'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' +
+              '(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+            viewport: { width: 1280, height: 800 }
+          });
+          const page = await ctx.newPage();
+          console.log('Visiting', url);
+          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+          await page.waitForTimeout(3000);
+
+          const wakeBtn = page.getByRole('button', { name: /get this app back up/i });
+          if ((await wakeBtn.count()) > 0) {
+            console.log('App was asleep — clicking wake button');
+            await wakeBtn.first().click();
+          } else {
+            console.log('App already awake');
+          }
+
+          try {
+            await page.waitForSelector('[data-testid="stApp"]', { timeout: 150000 });
+            console.log('Streamlit app shell detected');
+          } catch (e) {
+            console.log('stApp selector not found within 150s — continuing anyway');
+          }
+
+          await page.waitForTimeout(45000);
+          console.log('Session held; closing browser.');
+          await browser.close();
+          EOF
+          node wake.mjs

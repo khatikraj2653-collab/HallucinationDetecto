@@ -275,7 +275,7 @@ with hero_l:
 <div class="hd-desc">A multi-method ensemble that flags hallucinated claims by combining <strong>NLI entailment</strong>, <strong>RAG-grounding</strong>, a <strong>three-model LLM judge panel</strong> (OpenAI, Groq, Gemini), and <strong>cross-sample consistency</strong> checking &mdash; run in parallel as a LangGraph state machine, so no single blind spot decides the verdict alone.</div>
 <div class="hd-chips">
   <span class="hd-chip">LangGraph</span><span class="hd-chip">NLI · BART-MNLI</span><span class="hd-chip">RAG · FAISS</span>
-  <span class="hd-chip">GPT-4o-mini Judge</span><span class="hd-chip">Groq Llama 3.3 70B Judge</span><span class="hd-chip">Gemini 2.0 Flash Judge</span>
+  <span class="hd-chip">GPT-6 Luna Judge</span><span class="hd-chip">Groq GPT-OSS 120B Judge</span><span class="hd-chip">Gemini 3.6 Flash Judge</span>
 </div>
 """,
         unsafe_allow_html=True,
@@ -498,11 +498,14 @@ with tab_analyze:
                             bad_votes += 1
 
                         judge_results = result["judge_results"]
+                        judge_used = result.get("judge_used") or {}
                         unsupported = sum(1 for v in judge_results.values() if "ERROR" not in v.upper() and "UNSUPPORTED" in v.upper())
                         valid_judges = sum(1 for v in judge_results.values() if "ERROR" not in v.upper())
                         with st.popover(f"Judges: {unsupported}/{valid_judges} flagged"):
                             for jn, jv in judge_results.items():
-                                st.write(f"**{jn}:** {jv}")
+                                ju = judge_used.get(jn)
+                                jl = f"{jn} (answered by {ju} — fallback)" if ju and ju != jn else jn
+                                st.write(f"**{jl}:** {jv}")
                         total_signals += valid_judges
                         bad_votes += unsupported
 
@@ -648,8 +651,8 @@ claims as SUPPORTED / UNSUPPORTED / UNCLEAR, and (6) cross-sample consistency, w
 three-model panel compares all three sampled answers for stability."""
     )
     st.caption(
-        "Note: the live demo's judge panel currently runs gpt-4o-mini (OpenAI), llama-3.3-70b-versatile (Groq) and "
-        "gemini-2.0-flash (Google), each with the other two as automatic fallbacks, so live scores can differ "
+        "Note: the live demo's judge panel currently runs gpt-6-luna (OpenAI), openai/gpt-oss-120b (Groq) and "
+        "gemini-3.6-flash (Google), each with the other two as automatic fallbacks, so live scores can differ "
         "from the models reported in the evaluation above."
     )
     st.markdown(
@@ -917,7 +920,7 @@ st.markdown(
 <span class="hd-sk-chip">FAISS</span>
 <span class="hd-sk-chip">Self-Consistency</span>
 <span class="hd-sk-chip">Prompt Engineering</span>
-<span class="hd-sk-chip">OpenAI GPT-4o-mini</span>
+<span class="hd-sk-chip">OpenAI GPT-6 Luna</span>
 <span class="hd-sk-chip">Groq</span>
 <span class="hd-sk-chip">Google Gemini</span>
 <span class="hd-sk-chip">Parallel Execution</span>

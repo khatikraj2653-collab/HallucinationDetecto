@@ -5,7 +5,7 @@ from typing import TypedDict, Dict, Any
 
 from rag_utils import check_claim_grounding
 from refusal_utils import is_refusal
-from llm_judge import multi_llm_judge
+from llm_judge import multi_llm_judge_detailed
 
 
 class ClaimState(TypedDict):
@@ -19,6 +19,7 @@ class ClaimState(TypedDict):
     rag_score: float
     best_chunk: str
     judge_results: Dict[str, str]
+    judge_used: Dict[str, Any]
     is_refusal: bool
 
 
@@ -38,7 +39,7 @@ def node_run_detectors_parallel(state: ClaimState) -> ClaimState:
         return check_claim_grounding(state["vectorstore"], state["claim"])
 
     def run_judges():
-        return multi_llm_judge(state["context"], state["claim"])
+        return multi_llm_judge_detailed(state["context"], state["claim"])
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         nli_future = executor.submit(run_nli)
@@ -47,7 +48,7 @@ def node_run_detectors_parallel(state: ClaimState) -> ClaimState:
 
         nli_label, nli_score = nli_future.result()
         is_grounded, rag_score, best_chunk = rag_future.result()
-        judge_results = judges_future.result()
+        judge_results, judge_used = judges_future.result()
 
     state["nli_label"] = nli_label
     state["nli_score"] = nli_score
@@ -55,6 +56,7 @@ def node_run_detectors_parallel(state: ClaimState) -> ClaimState:
     state["rag_score"] = rag_score
     state["best_chunk"] = best_chunk
     state["judge_results"] = judge_results
+    state["judge_used"] = judge_used
     return state
 
 
@@ -79,7 +81,7 @@ def analyze_claim(context, claim, vectorstore, nli_fn):
         "nli_fn": nli_fn,
         "nli_label": "", "nli_score": 0.0,
         "is_grounded": False, "rag_score": 0.0, "best_chunk": "",
-        "judge_results": {}, "is_refusal": False
+        "judge_results": {}, "judge_used": {}, "is_refusal": False
     })
     return result
 

@@ -7,12 +7,13 @@ def generate_multiple_answers(context, question, n=3):
     answers = []
     for _ in range(n):
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-6-luna",
             messages=[
                 {"role": "system", "content": "Answer the question using only the given context."},
                 {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
             ],
-            temperature=0.9
+            temperature=0.9,
+            extra_body={"reasoning_effort": "none"}
         )
         answers.append(response.choices[0].message.content)
     return answers

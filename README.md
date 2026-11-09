@@ -20,7 +20,7 @@ Six-signal ensemble (NLI, retrieval grounding, three-model LLM-judge panel, self
 
 ```mermaid
 flowchart TD
-    A["User input: Context + Question<br/>(frontend/app.py)"] --> B["generate_multiple_answers()<br/>consistency_utils.py<br/>GPT-4o, temp=0.9, n=3"]
+    A["User input: Context + Question<br/>(frontend/app.py)"] --> B["generate_multiple_answers()<br/>consistency_utils.py<br/>gpt-6-luna, temp=0.9, n=3"]
     B --> C["multi_consistency_check()<br/>llm_judge.py<br/>cross-sample consistency vote"]
     B --> D["build_vectorstore(context)<br/>rag_utils.py — FAISS index"]
     C --> E
@@ -33,7 +33,7 @@ flowchart TD
         G1["node_check_refusal<br/>is_refusal() — refusal_utils.py"] --> G2["node_run_detectors_parallel<br/>ThreadPoolExecutor(3 workers)"]
         G2 --> N["NLI check<br/>facebook/bart-large-mnli"]
         G2 --> R["check_claim_grounding()<br/>rag_utils.py — FAISS cosine sim"]
-        G2 --> J["multi_llm_judge()<br/>llm_judge.py — GPT-4o, Groq Llama-3.3, Gemini"]
+        G2 --> J["multi_llm_judge()<br/>llm_judge.py — gpt-6-luna, Groq gpt-oss-120b, gemini-3.6-flash"]
     end
 
     G --> G1

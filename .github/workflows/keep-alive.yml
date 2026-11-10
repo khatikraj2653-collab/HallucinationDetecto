@@ -2,12 +2,13 @@ name: Keep Streamlit app awake
 
 on:
   schedule:
-    # Every 3 hours. A plain HTTP ping doesn't count as "activity" on
+    # Every hour: GitHub often delays or skips scheduled runs, so a 3-hourly
+    # schedule left gaps of 10+ hours. A plain HTTP ping doesn't count as "activity" on
     # Streamlit Community Cloud — the app's inactivity timer is based on
     # real WebSocket sessions. So we open the page in headless Chromium,
     # click the "wake" button if we land on the Zzzz screen, and hold the
     # session for ~45s so Streamlit registers an active user.
-    - cron: '45 */3 * * *'
+    - cron: '43 * * * *'
   workflow_dispatch: {}
 
 jobs:
@@ -53,12 +54,29 @@ jobs:
             console.log('App already awake');
           }
 
-          try {
-            await page.waitForSelector('[data-testid="stApp"]', { timeout: 150000 });
-            console.log('Streamlit app shell detected');
-          } catch (e) {
-            console.log('stApp selector not found within 150s — continuing anyway');
+          // Streamlit Community Cloud serves the app inside an iframe (/~/+/), so the
+          // app shell is never in the top frame: look for it in every frame.
+          const deadline = Date.now() + 150000;
+          let rendered = false;
+          while (!rendered && Date.now() < deadline) {
+            for (const frame of page.frames()) {
+              try {
+                if ((await frame.locator('[data-testid="stApp"]').count()) > 0) {
+                  rendered = true;
+                  break;
+                }
+              } catch (e) {
+                // Frame was replaced while loading; check again on the next pass.
+              }
+            }
+            if (!rendered) await page.waitForTimeout(2000);
           }
+          if (!rendered) {
+            console.error('App did not render within 150s - failing the run.');
+            await browser.close();
+            process.exit(1);
+          }
+          console.log('Streamlit app rendered');
 
           await page.waitForTimeout(45000);
           console.log('Session held; closing browser.');

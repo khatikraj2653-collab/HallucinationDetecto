@@ -37,45 +37,46 @@ def _parse_verdict(raw: str) -> str:
 
 def judge_openai(context, claim):
     response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-6-luna",
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
-        temperature=0
+        temperature=0,
+        extra_body={"reasoning_effort": "none"}
     )
     return _parse_verdict(response.choices[0].message.content)
 
 def judge_groq(context, claim):
-    # Upgraded from gpt-oss-20b (noisy, over-flagged simple paraphrases) to
-    # Llama 3.3 70B which follows the rubric far more reliably.
+    # gpt-oss-120b replaces Llama 3.3 70B (retired by Groq); gpt-oss-20b was too noisy here (over-flagged simple paraphrases).
     response = groq_client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[{"role": "user", "content": JUDGE_PROMPT.format(context=context, claim=claim)}],
         temperature=0
     )
     return _parse_verdict(response.choices[0].message.content)
 
 def judge_gemini(context, claim):
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("gemini-3.6-flash")
     response = model.generate_content(JUDGE_PROMPT.format(context=context, claim=claim))
     return _parse_verdict(response.text)
 
 def ask_openai(prompt):
     response = openai_client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-6-luna",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0
+        temperature=0,
+        extra_body={"reasoning_effort": "none"}
     )
     return response.choices[0].message.content.strip()
 
 def ask_groq(prompt):
     response = groq_client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-20b",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )
     return response.choices[0].message.content.strip()
 
 def ask_gemini(prompt):
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.GenerativeModel("gemini-3.6-flash")
     response = model.generate_content(prompt)
     return response.text.strip()
 

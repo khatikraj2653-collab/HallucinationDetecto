@@ -14,9 +14,10 @@ Respond with exactly one word: REFUSAL or CLAIM."""
 def is_refusal(claim):
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-6-luna",
             messages=[{"role": "user", "content": REFUSAL_CHECK_PROMPT.format(claim=claim)}],
-            temperature=0
+            temperature=0,
+            extra_body={"reasoning_effort": "none"}
         )
         verdict = response.choices[0].message.content.strip().upper()
         return "REFUSAL" in verdict

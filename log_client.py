@@ -3,6 +3,7 @@ Best-effort activity logging to the shared portfolio dashboard.
 Never raises — a failed/slow log call must never break the app.
 """
 import os
+import re
 import requests
 import streamlit as st
 from dotenv import load_dotenv
@@ -12,6 +13,29 @@ load_dotenv()  # ensures PORTFOLIO_LOG_SECRET is loaded even on pages that don't
 LOG_URL = "https://portfolio-raj.pages.dev/api/log"
 LOG_SECRET = os.getenv("PORTFOLIO_LOG_SECRET", "")
 APP_NAME = "hallucinationdetector"
+
+# Mirrors portfolio-raj/_middleware.js so the shared dashboard sees the same
+# human-vs-bot split regardless of which app the log came from. Catches:
+# search engine / LLM crawlers (bingbot, gptbot, claude-web, perplexity,
+# applebot, ...), uptime monitors (uptimerobot, pingdom), scrapers
+# (semrush, ahrefs, dataforseo), headless HTTP clients (python-requests,
+# curl, axios), social-preview fetchers (facebookexternalhit, slackbot,
+# linkedinbot), and our own keep-alive workflow (tagged KeepAliveBot/1.0).
+# Case-insensitive; no UA at all is treated as a bot since every real
+# browser sends one.
+_BOT_PATTERN = re.compile(
+    r"bot|crawl|spider|slurp|facebookexternalhit|preview|monitor|uptimerobot|pingdom|statuscake|"
+    r"gptbot|google-inspectiontool|claude-?web|anthropic|openai|duckduckgo|yandex|baiduspider|"
+    r"semrush|ahrefs|mj12|dotbot|petalbot|chatgpt|perplexity|headlesschrome|lighthouse|pagespeed|"
+    r"dataforseo|curl|wget|python-requests|httpclient|axios|java/",
+    re.IGNORECASE,
+)
+
+
+def _is_bot(ua):
+    if not ua:
+        return True
+    return bool(_BOT_PATTERN.search(ua))
 
 
 def _visitor_info():
@@ -32,6 +56,8 @@ def log_event(event_type: str, detail: str = None, question: str = None, reply: 
     if not LOG_SECRET:
         return
     ip, ua, referrer = _visitor_info()
+    if _is_bot(ua):
+        return
     try:
         requests.post(
             LOG_URL,
